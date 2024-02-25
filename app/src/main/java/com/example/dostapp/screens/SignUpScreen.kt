@@ -57,7 +57,7 @@ fun SignUpScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Button(onClick = { onBackClicked }) {
+        Button(onClick = { onBackClicked() }) {
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
         }
         OutlinedTextField(
