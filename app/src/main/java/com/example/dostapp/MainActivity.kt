@@ -1,6 +1,8 @@
 package com.example.dostapp
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -20,9 +22,9 @@ import com.google.android.gms.location.LocationServices
 class MainActivity : ComponentActivity() {
     val viewModel : PingViewModel by viewModels()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         setContent {
             DostappTheme {
