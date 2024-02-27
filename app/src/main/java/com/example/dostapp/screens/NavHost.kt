@@ -24,9 +24,9 @@ fun Navigation(navController: NavHostController, viewModel: PingViewModel){
         }
         composable(Screen.SignUpScreen.route){
             val context = LocalContext.current
-            SignUpScreen(context = context, onBackClicked = { navController.navigate(Screen.SignInScreen.route) }, onButtonClicked = {email,username,password->
+            SignUpScreen(context = context, onSignInClicked = { navController.navigate(Screen.SignInScreen.route) }, onSignUpClicked = {a,b,c->
 
-            })
+            }, onGoogleSignInClicked = {})
         }
         composable(Screen.MainScreen.route){
             MainScreen(viewModel)
