@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.dostapp.components.SquareCard
+import com.example.dostapp.components.SquaredCardPreview
 import com.example.dostapp.screens.Navigation
 import com.example.dostapp.ui.theme.DostappTheme
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Navigation(navController = navController, viewModel = viewModel)
+
                 }
             }
         }
