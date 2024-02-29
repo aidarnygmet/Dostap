@@ -22,7 +22,7 @@ private val DarkColorScheme = darkColorScheme(
     background = background
 )
 
-private val LightColorScheme = lightColorScheme(
+val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40,
@@ -61,7 +61,7 @@ fun DostappTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = defTypography,
         content = content
     )
 }

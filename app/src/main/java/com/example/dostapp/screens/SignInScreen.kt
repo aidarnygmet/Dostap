@@ -51,6 +51,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dostapp.R
+import com.example.dostapp.ui.theme.LightColorScheme
+import com.example.dostapp.ui.theme.defTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +69,7 @@ fun SignInScreen(
         mutableStateOf("")
     }
 
-
+    val context = LocalContext.current
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color(0xFF1A8EEA))
@@ -86,26 +88,22 @@ fun SignInScreen(
                 .padding(horizontal = 30.dp)
                 .padding(top = 60.dp)
             ) {
-                Text(text = "Вход", fontFamily = FontFamily(Font(R.font.poppins_bold)),
-                    fontSize = 32.sp)
-                Text(text = "Введите Ваш логин и пароль", fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    fontSize = 14.sp)
+                Text(text = context.getString(R.string.login_label), style = MaterialTheme.typography.displayLarge)
+                Text(text = context.getString(R.string.login_enter_login), style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Логин", fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                        fontSize = 12.sp)
+                    Text(text = context.getString(R.string.login_login_label), style = MaterialTheme.typography.titleLarge)
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
                         value = email,
                         onValueChange = { email = it },
-                        placeholder={ Text(text = "youremail@gmail.com", fontFamily = FontFamily(
-                            Font(R.font.poppins_light)
-                        ),
-                            fontSize = 10.sp)},
+                        placeholder={ Text(text = context.getString(R.string.login_login_placeholder), style = MaterialTheme.typography.labelSmall, modifier = Modifier
+                            .fillMaxWidth())
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(45.dp)
@@ -119,15 +117,13 @@ fun SignInScreen(
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Пароль", fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                        fontSize = 12.sp)
+                    Text(text = context.getString(R.string.login_password_label), style = MaterialTheme.typography.titleLarge)
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
                         value = password,
                         onValueChange = { password = it },
-                        placeholder={ Text(text = "********", fontFamily = FontFamily(Font(R.font.poppins_light)),
-                            fontSize = 10.sp,
+                        placeholder={ Text(text = "********", style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier
                                 .fillMaxWidth()
                         )},
@@ -145,8 +141,7 @@ fun SignInScreen(
                         .padding(8.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Text(text = "Забыли пароль?", fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                        fontSize = 12.sp)
+                    Text(text = context.getString(R.string.login_forgot_password), style = MaterialTheme.typography.titleMedium)
                 }
                 Spacer(modifier = Modifier.size(30.dp))
                 Button(modifier = Modifier
@@ -157,7 +152,7 @@ fun SignInScreen(
                         containerColor = Color(0xFF1A1A1A),
                     )
                     , onClick = { onSignInClicked(email, password) }) {
-                    Text(text = "Вход")
+                    Text(text = context.getString(R.string.login_button))
                 }
                 Spacer(modifier = Modifier.size(10.dp))
                 Row(modifier = Modifier.fillMaxWidth(),
@@ -217,11 +212,9 @@ fun SignInScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Don't have an account?", fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                        fontSize = 14.sp)
+                    Text(text = context.getString(R.string.login_reg_text), style = MaterialTheme.typography.bodyMedium)
                     TextButton(onClick = { onSignUpClicked() }) {
-                        Text(text = "Sign Up", fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                            fontSize = 14.sp)
+                        Text(text = context.getString(R.string.login_reg_button), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
 
@@ -232,10 +225,16 @@ fun SignInScreen(
 }
 @Preview
 @Composable
-fun preview(){
-    SignInScreen(onGoogleSignInClicked = { /*TODO*/ }, onSignInClicked = {email, password->
+fun PreviewSignIn(){
+    MaterialTheme(
+        colorScheme = LightColorScheme,
+        typography = defTypography
+    ) {
+        SignInScreen(onGoogleSignInClicked = { /*TODO*/ }, onSignInClicked = {email, password->
 
-    }) {
+        }) {
 
+        }
     }
+
 }

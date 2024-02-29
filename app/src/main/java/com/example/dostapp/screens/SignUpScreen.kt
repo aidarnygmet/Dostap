@@ -1,6 +1,7 @@
 package com.example.dostapp.screens
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +32,9 @@ import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxColors
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -61,6 +65,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.dostapp.R
+import com.example.dostapp.ui.theme.LightColorScheme
+import com.example.dostapp.ui.theme.defTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,8 +85,17 @@ fun SignUpScreen(
     var password by remember {
         mutableStateOf("")
     }
+    var confirm by remember {
+        mutableStateOf("")
+    }
+    var check1 by remember {
+        mutableStateOf(false)
+    }
+    var check2 by remember {
+        mutableStateOf(false)
+    }
 
-
+    val context = LocalContext.current
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color(0xFF1A8EEA))
@@ -100,21 +115,17 @@ fun SignUpScreen(
                 .padding(top = 60.dp)
                 .verticalScroll(rememberScrollState())
             ) {
-                Text(text = "Регистрация", fontFamily = FontFamily(Font(R.font.poppins_bold)),
-                    fontSize = 32.sp)
-                Text(text = "Создайте Аккаунт", fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    fontSize = 14.sp)
+                Text(text = context.getString(R.string.reg_label), style = MaterialTheme.typography.displayLarge)
+                Text(text = context.getString(R.string.reg_create_an_account), style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(20.dp))
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Имя", fontFamily = FontFamily(Font(R.font.poppins_bold)),
-                        fontSize = 12.sp)
+                    Text(text = context.getString(R.string.reg_name_label), style = MaterialTheme.typography.titleLarge)
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
-                        placeholder={ Text(text = "Ваше имя", fontFamily = FontFamily(Font(R.font.poppins_light)),
-                            fontSize = 10.sp)},
+                        placeholder={ Text(text = context.getString(R.string.reg_name_placeholder), style = MaterialTheme.typography.labelSmall)},
                         value = username,
                         onValueChange = { username = it },
                         modifier = Modifier
@@ -130,15 +141,13 @@ fun SignUpScreen(
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Email", fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                        fontSize = 12.sp)
+                    Text(text = context.getString(R.string.reg_email_label), style = MaterialTheme.typography.titleLarge)
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
                         value = email,
                         onValueChange = { email = it },
-                        placeholder={ Text(text = "youremail@gmail.com", fontFamily = FontFamily(Font(R.font.poppins_light)),
-                            fontSize = 10.sp)},
+                        placeholder={ Text(text = context.getString(R.string.reg_email_placeholder), style = MaterialTheme.typography.labelSmall)},
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(45.dp)
@@ -152,15 +161,13 @@ fun SignUpScreen(
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Пароль", fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                        fontSize = 12.sp)
+                    Text(text = context.getString(R.string.reg_password_label), style = MaterialTheme.typography.titleLarge)
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
                         value = password,
                         onValueChange = { password = it },
-                        placeholder={ Text(text = "********", fontFamily = FontFamily(Font(R.font.poppins_light)),
-                            fontSize = 10.sp,
+                        placeholder={ Text(text = "********", style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier
                                 .fillMaxWidth()
                         )},
@@ -172,16 +179,60 @@ fun SignUpScreen(
                         visualTransformation = PasswordVisualTransformation(),
                     )
                 }
-                Spacer(modifier = Modifier.size(30.dp))
+                Spacer(modifier = Modifier.height(12.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = context.getString(R.string.reg_confirm_label), style = MaterialTheme.typography.titleLarge)
+                    Spacer(modifier = Modifier.size(6.dp))
+                    OutlinedTextField(
+                        shape = RoundedCornerShape(44.dp),
+                        value = confirm,
+                        onValueChange = { confirm = it },
+                        placeholder={ Text(text = "********", style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(45.dp)
+                        ,
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
+                        visualTransformation = PasswordVisualTransformation(),
+                    )
+                }
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(
+                        checked = check1,
+                        onCheckedChange = { check1 = it},
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = Color.Black,
+                            checkmarkColor = Color.White
+                        )
+                    )
+                    Text(text = context.getString(R.string.reg_checkbox_1), style = MaterialTheme.typography.labelSmall)
+                }
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(
+                        checked = check2,
+                        onCheckedChange = {check2 = it},
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = Color.Black,
+                            checkmarkColor = Color.White
+                        ))
+                    Text(text = context.getString(R.string.reg_checkbox_2), style = MaterialTheme.typography.labelSmall)
+                }
+                Spacer(modifier = Modifier.size(20.dp))
                 Button(modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
                     ,
+                    enabled= check1 && check2,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF1A1A1A),
                     )
                     , onClick = { onSignUpClicked(username, email, password) }) {
-                    Text(text = "Зарегистрироваться")
+                    Text(text = context.getString(R.string.reg_button))
                 }
                 Spacer(modifier = Modifier.size(10.dp))
                 Row(modifier = Modifier.fillMaxWidth(),
@@ -202,6 +253,7 @@ fun SignUpScreen(
                         modifier = Modifier.weight(1f)
                     )
                 }
+
                 Spacer(modifier = Modifier.size(20.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -237,11 +289,9 @@ fun SignUpScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Уже есть аккаунт?", fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                        fontSize = 14.sp)
+                    Text(text = context.getString(R.string.reg_have_account_label), style = MaterialTheme.typography.bodyMedium)
                     TextButton(onClick = { onSignInClicked() }) {
-                        Text(text = "Войти", fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                            fontSize = 14.sp)
+                        Text(text = context.getString(R.string.reg_have_account_button), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
 
@@ -333,7 +383,13 @@ fun SignUpScreen(
 @Composable
 fun PreviewSignUp(){
     val context = LocalContext.current
-    SignUpScreen(context = context, onSignInClicked = { /*TODO*/ }, onSignUpClicked = {a,b,c->}) {
-        
+    MaterialTheme(
+        colorScheme = LightColorScheme,
+        typography = defTypography
+    ) {
+        SignUpScreen(context = context, onSignInClicked = { /*TODO*/ }, onSignUpClicked = {a,b,c->}) {
+
+        }
     }
+
 }

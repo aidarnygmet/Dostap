@@ -40,6 +40,8 @@ import com.example.dostapp.R
 import com.example.dostapp.components.RectangleCard
 import com.example.dostapp.components.SquareCard
 import com.example.dostapp.data.EventCard
+import com.example.dostapp.ui.theme.LightColorScheme
+import com.example.dostapp.ui.theme.defTypography
 
 @Composable
 fun HomeScreen(){
@@ -62,13 +64,11 @@ fun HomeScreen(){
             .padding(20.dp)){
             Text(
                 text = context.getString(R.string.location),
-                fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                fontSize = 12.sp
+                style = MaterialTheme.typography.bodySmall
                 )
             Text(
                 text = "Астана, Казахстан",
-                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                fontSize = 16.sp
+                style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.size(20.dp))
             SearchBar(modifier = Modifier.fillMaxWidth())
@@ -80,13 +80,11 @@ fun HomeScreen(){
                 ){
                 Text(
                     text = context.getString(R.string.for_you),
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontSize = 20.sp
+                    style = MaterialTheme.typography.headlineLarge
                 )
                 Text(
                     text = context.getString(R.string.view_everything),
-                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                    fontSize = 10.sp
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
             Spacer(modifier = Modifier.size(20.dp))
@@ -97,7 +95,7 @@ fun HomeScreen(){
                     } else {
                         SquareCard(eventCard = eventCard2)
                     }
-                    Spacer(modifier = Modifier.size(5.dp))
+                    Spacer(modifier = Modifier.size(20.dp))
                 }
             }
             Spacer(modifier = Modifier.size(20.dp))
@@ -108,13 +106,11 @@ fun HomeScreen(){
             ){
                 Text(
                     text = context.getString(R.string.popular_nearby),
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                    fontSize = 20.sp
+                    style = MaterialTheme.typography.headlineLarge
                 )
                 Text(
                     text = context.getString(R.string.view_everything),
-                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                    fontSize = 10.sp
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
             Spacer(modifier = Modifier.size(20.dp))
@@ -125,7 +121,7 @@ fun HomeScreen(){
                     } else {
                         RectangleCard(eventCard = eventCard2)
                     }
-                    Spacer(modifier = Modifier.size(5.dp))
+                    Spacer(modifier = Modifier.size(15.dp))
                 }
             }
         }
@@ -151,5 +147,11 @@ fun SearchBar(modifier: Modifier = Modifier){
 @Preview
 @Composable
 fun HomeScreenPreview(){
-    HomeScreen()
+    MaterialTheme(
+        typography = defTypography,
+        colorScheme = LightColorScheme
+    ){
+        HomeScreen()
+    }
+
 }

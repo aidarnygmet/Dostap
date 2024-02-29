@@ -1,5 +1,6 @@
 package com.example.dostapp.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,13 +42,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dostapp.R
 import com.example.dostapp.data.EventCard
+import com.example.dostapp.ui.theme.LightColorScheme
+import com.example.dostapp.ui.theme.defTypography
 
 @Composable
 fun SquareCard(
-    modifier: Modifier = Modifier.size(width = 200.dp, height = 256.dp),
+    modifier: Modifier = Modifier.size(width = 200.dp, height = 260.dp),
     eventCard: EventCard
 ){
-    OutlinedCard(shape= RoundedCornerShape(20.dp) ,modifier = modifier, colors = CardDefaults.outlinedCardColors()) {
+    OutlinedCard(shape= RoundedCornerShape(20.dp) ,modifier = modifier, border = BorderStroke(0.5.dp, color = Color(0xFFAFAFAF))) {
         Box(modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)) {
@@ -60,8 +64,7 @@ fun SquareCard(
                 .fillMaxSize()
                 .padding(20.dp)
             ){
-                Text(text = eventCard.category, fontFamily = FontFamily(Font(R.font.poppins_bold)),
-                    fontSize= 10.sp,
+                Text(text = eventCard.category, style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier
                         .clip(RoundedCornerShape(6.dp))
                         .background(Color(0xFFF9F9F9))
@@ -74,24 +77,20 @@ fun SquareCard(
             .fillMaxSize()
             .padding(horizontal = 5.dp), verticalArrangement = Arrangement.SpaceEvenly) {
             Row (modifier = Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween){
-                Text(text = eventCard.name, fontFamily = FontFamily(Font(R.font.poppins_bold)),
-                    fontSize= 12.sp,)
+                Text(text = eventCard.name, style = MaterialTheme.typography.titleMedium)
                 Row(verticalAlignment = Alignment.CenterVertically){
                     Image(painter = painterResource(id = R.drawable.rating), contentDescription = "rating")
-                    Text(text = eventCard.rating.toString(), fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                        fontSize= 10.sp,)
+                    Text(text = eventCard.rating.toString(), style = MaterialTheme.typography.bodySmall)
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(painter = painterResource(id = R.drawable.location), contentDescription = "loc", modifier = Modifier.size(12.dp))
                 Spacer(modifier = Modifier.size(2.dp))
-                Text(text = eventCard.address, fontFamily = FontFamily(Font(R.font.poppins_light)),
-                    fontSize= 8.sp,)
+                Text(text = eventCard.address, style = MaterialTheme.typography.labelSmall)
             }
             Row {
                 Spacer(modifier = Modifier.size(14.dp))
-                Text(text = eventCard.time, fontFamily = FontFamily(Font(R.font.poppins_light)),
-                    fontSize= 8.sp,)
+                Text(text = eventCard.time, style = MaterialTheme.typography.labelSmall)
             }
         }
     }
@@ -99,7 +98,7 @@ fun SquareCard(
 @Composable
 fun RectangleCard(modifier: Modifier = Modifier.size(width = 380.dp, height = 90.dp),
                   eventCard: EventCard){
-        OutlinedCard(shape= RoundedCornerShape(20.dp) ,modifier = modifier, colors = CardDefaults.outlinedCardColors()) {
+        OutlinedCard(shape= RoundedCornerShape(20.dp) ,modifier = modifier, border = BorderStroke(0.5.dp, color = Color(0xFFAFAFAF))) {
             Row(modifier = Modifier) {
                 Image(painter = painterResource(id = eventCard.pic), contentDescription = "",
                     modifier = Modifier
@@ -111,12 +110,10 @@ fun RectangleCard(modifier: Modifier = Modifier.size(width = 380.dp, height = 90
                     .fillMaxHeight()
                     .padding(5.dp), verticalArrangement = Arrangement.SpaceEvenly){
                     Row {
-                        Text(text = eventCard.name, fontFamily = FontFamily(Font(R.font.poppins_bold)),
-                            fontSize= 16.sp)
+                        Text(text = eventCard.name, style = MaterialTheme.typography.headlineMedium)
                     }
                     Row {
-                        Text(text = eventCard.category, fontFamily = FontFamily(Font(R.font.poppins_bold)),
-                            fontSize= 10.sp,
+                        Text(text = eventCard.category, style = MaterialTheme.typography.labelMedium,
                             modifier = Modifier
                                 .clip(RoundedCornerShape(6.dp))
                                 .border(1.dp, Color(0xFFAFAFAF), RoundedCornerShape(6.dp))
@@ -128,16 +125,14 @@ fun RectangleCard(modifier: Modifier = Modifier.size(width = 380.dp, height = 90
                         .fillMaxWidth()
                         .padding(end = 4.dp), verticalAlignment = Alignment.CenterVertically
                     , horizontalArrangement = Arrangement.SpaceBetween){
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Image(painter = painterResource(id = R.drawable.location), contentDescription = "loc", modifier = Modifier.size(16.dp))
                             Spacer(modifier = Modifier.size(4.dp))
-                            Text(text = eventCard.address, fontFamily = FontFamily(Font(R.font.poppins_light)),
-                                fontSize= 10.sp,)
+                            Text(text = eventCard.address, style = MaterialTheme.typography.labelSmall)
                         }
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Image(painter = painterResource(id = R.drawable.rating), contentDescription = "rating")
-                            Text(text = eventCard.rating.toString(), fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                                fontSize= 12.sp,)
+                            Text(text = eventCard.rating.toString(), style = MaterialTheme.typography.bodyLarge)
                         }
 
                     }
@@ -157,46 +152,11 @@ fun SquaredCardPreview(){
         name = "Open Air на Expo", address = "EXPO 2017, Astana", time ="Пятница, 23.10 в 19:00",
         rating = 4.7F, category = "Open Air",
         pic = R.drawable.expo)
-    Column(modifier = Modifier
-        .verticalScroll(rememberScrollState())
-        .fillMaxSize()
-        .padding(10.dp)) {
-        Row(modifier = Modifier
-            .horizontalScroll(rememberScrollState())
-            .background(Color.White)
-            .padding(5.dp)){
-            SquareCard(eventCard = eventCard)
-            Spacer(modifier = Modifier.size(10.dp))
-            SquareCard(eventCard = eventCard2)
-            Spacer(modifier = Modifier.size(10.dp))
-            SquareCard(eventCard = eventCard)
-            Spacer(modifier = Modifier.size(10.dp))
-            SquareCard(eventCard = eventCard2)
-            Spacer(modifier = Modifier.size(10.dp))
-            SquareCard(eventCard = eventCard)
-            Spacer(modifier = Modifier.size(10.dp))
-            SquareCard(eventCard = eventCard2)
-            Spacer(modifier = Modifier.size(10.dp))
-        }
-        Column(modifier = Modifier
-            .background(Color.White)
-            .padding(5.dp)){
-            RectangleCard(eventCard = eventCard)
-            Spacer(modifier = Modifier.size(10.dp))
-            RectangleCard(eventCard = eventCard2)
-            Spacer(modifier = Modifier.size(10.dp))
-            RectangleCard(eventCard = eventCard)
-            Spacer(modifier = Modifier.size(10.dp))
-            RectangleCard(eventCard = eventCard2)
-            Spacer(modifier = Modifier.size(10.dp))
-            RectangleCard(eventCard = eventCard)
-            Spacer(modifier = Modifier.size(10.dp))
-            RectangleCard(eventCard = eventCard2)
-            Spacer(modifier = Modifier.size(10.dp))
-            RectangleCard(eventCard = eventCard)
-            Spacer(modifier = Modifier.size(10.dp))
-            RectangleCard(eventCard = eventCard2)
-        }
+    MaterialTheme(
+        typography = defTypography,
+        colorScheme = LightColorScheme
+    ){
+        RectangleCard(eventCard = eventCard)
     }
 
 

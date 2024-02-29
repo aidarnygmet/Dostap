@@ -11,4 +11,30 @@
     <string name= "for_you">Специально для Вас</string>
     <string name= "view_everything">Посмотреть все</string>
     <string name= "popular_nearby">Популярно рядом</string>
+    <string name= "reg_label">Регистрация</string>
+    <string name= "reg_name_label">Имя</string>
+    <string name= "reg_name_placeholder">Ваше Имя</string>
+    <string name= "reg_email_label">email</string>
+    <string name= "reg_email_placeholder">youremail@gmail.com</string>
+    <string name= "reg_password_label">Пароль</string>
+    <string name= "reg_confirm_label">Подтвердите Пароль</string>
+    <string name= "reg_checkbox_1">Мне 16 лет или больше</string>
+    <string name= "reg_create_an_account">Создайте Аккаунт</string>
+    <string name= "reg_checkbox_2">Я ознакомился и принимаю политику и условия использования DosTap</string>
+    <string name= "reg_button">Зарегистрироваться</string>
+    <string name= "reg_have_account_label">Уже есть аккаунт?</string>
+    <string name= "reg_have_account_button">Войти</string>
+    <string name= "login_label">Вход</string>
+    <string name= "login_enter_login">Введите Ваш логин и пароль</string>
+    <string name= "login_login_label">Логин</string>
+    <string name= "login_login_placeholder">youremail@gmail.com</string>
+    <string name= "login_password_label">Пароль</string>
+    <string name= "login_forgot_password">Забыли пароль?</string>
+    <string name= "login_button">Вход</string>
+    <string name= "login_reg_text">Нет аккаунта?</string>
+    <string name= "login_reg_button">Создайте Аккаунт</string>
+
+
+
+
 </resources>

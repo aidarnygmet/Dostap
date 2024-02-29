@@ -1,5 +1,6 @@
 package com.example.dostapp.screens
 
+import android.util.Log
 import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +37,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dostapp.R
+import com.example.dostapp.ui.theme.LightColorScheme
+import com.example.dostapp.ui.theme.defTypography
 
 @Composable
 fun onBoarding(
@@ -64,12 +67,10 @@ fun onBoarding(
                 .padding(top = 47.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
-                Text(text = params.label, fontFamily = FontFamily(Font(R.font.poppins_bold)),
-                    fontSize = 32.sp, textAlign = TextAlign.Center)
+                Text(text = params.label, style = MaterialTheme.typography.displayLarge, textAlign = TextAlign.Center)
+                Log.d("test", MaterialTheme.typography.displayLarge.fontSize.toString())
                 Spacer(modifier = Modifier.size(20.dp))
-                Text(text = params.body
-                    , fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                    fontSize = 16.sp, textAlign = TextAlign.Center)
+                Text(text = params.body, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 22.5.dp))
                 Spacer(modifier = Modifier.size(20.dp))
                 Button(modifier = Modifier
                     .fillMaxWidth()
@@ -126,30 +127,40 @@ data class OnBoardingData(
     val dot: Int,
     val buttonClicked: ()->Unit
 )
-//@Preview
-//@Composable
-//fun onBoardingPreview(){
-//    val context  = LocalContext.current
-//    val params = OnBoardingData(
-//        label = context.getString(R.string.onBoarding1_label),
-//        body = context.getString(R.string.onBoarding1_body),
-//        pic = R.drawable.devices,
-//        button = "Далее",
-//        dot = 1
-//        )
-//    val params2 = OnBoardingData(
-//        label = context.getString(R.string.onBoarding2_label),
-//        body = context.getString(R.string.onBoarding2_body),
-//        pic = R.drawable.party,
-//        button = "Далее",
-//        dot = 2
-//    )
-//    val params3 = OnBoardingData(
-//        label = context.getString(R.string.onBoarding3_label),
-//        body = context.getString(R.string.onBoarding3_body),
-//        pic = R.drawable.searching,
-//        button = "Зарегистрироваться",
-//        dot = 3
-//    )
-//    onBoarding(params3)
-//}
+@Preview
+@Composable
+fun onBoardingPreview(){
+    val context  = LocalContext.current
+    val params = OnBoardingData(
+        label = context.getString(R.string.onBoarding1_label),
+        body = context.getString(R.string.onBoarding1_body),
+        pic = R.drawable.devices,
+        button = "Далее",
+        dot = 1,
+        buttonClicked = {}
+        )
+    val params2 = OnBoardingData(
+        label = context.getString(R.string.onBoarding2_label),
+        body = context.getString(R.string.onBoarding2_body),
+        pic = R.drawable.party,
+        button = "Далее",
+        dot = 2,
+        buttonClicked = {}
+    )
+    val params3 = OnBoardingData(
+        label = context.getString(R.string.onBoarding3_label),
+        body = context.getString(R.string.onBoarding3_body),
+        pic = R.drawable.searching,
+        button = "Зарегистрироваться",
+        dot = 3,
+        buttonClicked = {}
+    )
+    MaterialTheme(
+        colorScheme = LightColorScheme,
+        typography = defTypography
+    ) {
+        onBoarding(params3)
+        Log.d("test", MaterialTheme.typography.toString())
+    }
+
+}
