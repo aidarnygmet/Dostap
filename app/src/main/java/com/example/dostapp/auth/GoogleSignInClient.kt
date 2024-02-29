@@ -1,4 +1,4 @@
-package com.example.dostapp
+package com.example.dostapp.auth
 
 import android.content.Context
 import com.google.android.gms.auth.api.identity.SignInClient

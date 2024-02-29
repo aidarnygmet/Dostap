@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedCard
@@ -42,18 +43,18 @@ import com.example.dostapp.data.EventCard
 
 @Composable
 fun SquareCard(
-    modifier: Modifier = Modifier.size(width = 250.dp, height = 320.dp),
+    modifier: Modifier = Modifier.size(width = 200.dp, height = 256.dp),
     eventCard: EventCard
 ){
     OutlinedCard(shape= RoundedCornerShape(20.dp) ,modifier = modifier, colors = CardDefaults.outlinedCardColors()) {
         Box(modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(1f)
-            .padding(2.dp)) {
+            .aspectRatio(1f)) {
             Image(painter = painterResource(id = eventCard.pic), contentDescription = "",
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f)
+                    .padding(4.dp)
                     .clip(RoundedCornerShape(20.dp)), contentScale = ContentScale.Crop)
             Box(modifier = Modifier
                 .fillMaxSize()
@@ -71,26 +72,26 @@ fun SquareCard(
         }
         Column(modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 10.dp), verticalArrangement = Arrangement.SpaceEvenly) {
+            .padding(horizontal = 5.dp), verticalArrangement = Arrangement.SpaceEvenly) {
             Row (modifier = Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween){
                 Text(text = eventCard.name, fontFamily = FontFamily(Font(R.font.poppins_bold)),
-                    fontSize= 14.sp,)
-                Row {
+                    fontSize= 12.sp,)
+                Row(verticalAlignment = Alignment.CenterVertically){
                     Image(painter = painterResource(id = R.drawable.rating), contentDescription = "rating")
                     Text(text = eventCard.rating.toString(), fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                        fontSize= 12.sp,)
+                        fontSize= 10.sp,)
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(painter = painterResource(id = R.drawable.location), contentDescription = "loc", modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.size(4.dp))
+                Image(painter = painterResource(id = R.drawable.location), contentDescription = "loc", modifier = Modifier.size(12.dp))
+                Spacer(modifier = Modifier.size(2.dp))
                 Text(text = eventCard.address, fontFamily = FontFamily(Font(R.font.poppins_light)),
-                    fontSize= 10.sp,)
+                    fontSize= 8.sp,)
             }
             Row {
-                Spacer(modifier = Modifier.size(20.dp))
+                Spacer(modifier = Modifier.size(14.dp))
                 Text(text = eventCard.time, fontFamily = FontFamily(Font(R.font.poppins_light)),
-                    fontSize= 10.sp,)
+                    fontSize= 8.sp,)
             }
         }
     }
@@ -123,7 +124,9 @@ fun RectangleCard(modifier: Modifier = Modifier.size(width = 380.dp, height = 90
                             textAlign = TextAlign.Center
                         )
                     }
-                    Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+                    Row (modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 4.dp), verticalAlignment = Alignment.CenterVertically
                     , horizontalArrangement = Arrangement.SpaceBetween){
                         Row {
                             Image(painter = painterResource(id = R.drawable.location), contentDescription = "loc", modifier = Modifier.size(16.dp))
@@ -154,7 +157,10 @@ fun SquaredCardPreview(){
         name = "Open Air на Expo", address = "EXPO 2017, Astana", time ="Пятница, 23.10 в 19:00",
         rating = 4.7F, category = "Open Air",
         pic = R.drawable.expo)
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier
+        .verticalScroll(rememberScrollState())
+        .fillMaxSize()
+        .padding(10.dp)) {
         Row(modifier = Modifier
             .horizontalScroll(rememberScrollState())
             .background(Color.White)
@@ -162,10 +168,31 @@ fun SquaredCardPreview(){
             SquareCard(eventCard = eventCard)
             Spacer(modifier = Modifier.size(10.dp))
             SquareCard(eventCard = eventCard2)
+            Spacer(modifier = Modifier.size(10.dp))
+            SquareCard(eventCard = eventCard)
+            Spacer(modifier = Modifier.size(10.dp))
+            SquareCard(eventCard = eventCard2)
+            Spacer(modifier = Modifier.size(10.dp))
+            SquareCard(eventCard = eventCard)
+            Spacer(modifier = Modifier.size(10.dp))
+            SquareCard(eventCard = eventCard2)
+            Spacer(modifier = Modifier.size(10.dp))
         }
         Column(modifier = Modifier
             .background(Color.White)
             .padding(5.dp)){
+            RectangleCard(eventCard = eventCard)
+            Spacer(modifier = Modifier.size(10.dp))
+            RectangleCard(eventCard = eventCard2)
+            Spacer(modifier = Modifier.size(10.dp))
+            RectangleCard(eventCard = eventCard)
+            Spacer(modifier = Modifier.size(10.dp))
+            RectangleCard(eventCard = eventCard2)
+            Spacer(modifier = Modifier.size(10.dp))
+            RectangleCard(eventCard = eventCard)
+            Spacer(modifier = Modifier.size(10.dp))
+            RectangleCard(eventCard = eventCard2)
+            Spacer(modifier = Modifier.size(10.dp))
             RectangleCard(eventCard = eventCard)
             Spacer(modifier = Modifier.size(10.dp))
             RectangleCard(eventCard = eventCard2)

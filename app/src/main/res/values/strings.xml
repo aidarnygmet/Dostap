@@ -6,4 +6,9 @@
     <string name="onBoarding2_body">Найдите тех, кто разделяет ваши интересы, ценности и взгляды, чтобы вместе находить новые вдохновляющие идеи, делиться опытом и создавать сильные связи.</string>
     <string name="onBoarding3_label">Исследуйте свой город</string>
     <string name="onBoarding3_body">Открывайте уникальные уголки своего города, встречайте новых людей, погружайтесь в культуру и историю, и наслаждайтесь всем тем, что ваш город может предложить.</string>
+    <string name= "search">Поиск Мероприятий</string>
+    <string name= "location">Ваше Местоположение</string>
+    <string name= "for_you">Специально для Вас</string>
+    <string name= "view_everything">Посмотреть все</string>
+    <string name= "popular_nearby">Популярно рядом</string>
 </resources>
