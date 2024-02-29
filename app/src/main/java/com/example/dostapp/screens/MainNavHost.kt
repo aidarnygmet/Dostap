@@ -7,6 +7,8 @@ import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.dostapp.R
+import com.example.dostapp.data.EventCard
 
 @Composable
 fun MainNavHost(
@@ -19,7 +21,7 @@ fun MainNavHost(
         composable(Screen.HomeScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
-            HomeScreen()
+            HomeScreen(navController)
         }
         composable(Screen.NotificationsScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
@@ -35,6 +37,13 @@ fun MainNavHost(
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
             ProfileScreen()
+        }
+        composable(Screen.ExpandedEventScreen.route){
+            val eventCard = EventCard(
+                name = "Футбол на Ботаническом", address = "Ботанический Парк, Астана", time ="Суббота, 24.10 в 17:00",
+                rating = 4.5F, category = "Футбол",
+                pic = R.drawable.ronaldo_big)
+            ExpandedEventScreen(eventCard = eventCard, navController = navController)
         }
     }
 }

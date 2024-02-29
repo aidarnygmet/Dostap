@@ -1,6 +1,7 @@
 package com.example.dostapp.screens
 
 import android.widget.Space
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.dostapp.R
 import com.example.dostapp.components.RectangleCard
 import com.example.dostapp.components.SquareCard
@@ -44,7 +46,7 @@ import com.example.dostapp.ui.theme.LightColorScheme
 import com.example.dostapp.ui.theme.defTypography
 
 @Composable
-fun HomeScreen(){
+fun HomeScreen(navController: NavController){
     val context = LocalContext.current
     val eventCard = EventCard(
         name = "Футбол на Ботаническом", address = "Ботанический Парк, Астана", time ="Суббота, 24.10 в 17:00",
@@ -91,7 +93,9 @@ fun HomeScreen(){
             LazyRow(){
                 items(5){item->
                     if(item%2==0){
-                        SquareCard(eventCard = eventCard)
+                        SquareCard(eventCard = eventCard, modifier = Modifier.clickable {
+                            navController.navigate(Screen.ExpandedEventScreen.route)
+                        })
                     } else {
                         SquareCard(eventCard = eventCard2)
                     }
@@ -124,6 +128,67 @@ fun HomeScreen(){
                     Spacer(modifier = Modifier.size(15.dp))
                 }
             }
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    modifier = Modifier.fillMaxWidth(.6f),
+                    text = context.getString(R.string.promo),
+                    style = MaterialTheme.typography.headlineLarge
+                )
+            }
+            Spacer(modifier = Modifier.size(20.dp))
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    modifier = Modifier.fillMaxWidth(.6f),
+                    text = context.getString(R.string.nearest),
+                    style = MaterialTheme.typography.headlineLarge
+                )
+                Text(
+                    text = context.getString(R.string.view_everything),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            Spacer(modifier = Modifier.size(20.dp))
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    modifier = Modifier.fillMaxWidth(.6f),
+                    text = context.getString(R.string.choose_location),
+                    style = MaterialTheme.typography.headlineLarge
+                )
+                Text(
+                    text = context.getString(R.string.view_everything),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            Spacer(modifier = Modifier.size(20.dp))
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    modifier = Modifier.fillMaxWidth(.6f),
+                    text = context.getString(R.string.article),
+                    style = MaterialTheme.typography.headlineLarge,
+
+                )
+                Text(
+                    text = context.getString(R.string.view_everything),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            Spacer(modifier = Modifier.size(20.dp))
         }
     }
 }
@@ -144,14 +209,14 @@ fun SearchBar(modifier: Modifier = Modifier){
         placeholder = { Text(text = context.getString(R.string.search))}
     )
 }
-@Preview
-@Composable
-fun HomeScreenPreview(){
-    MaterialTheme(
-        typography = defTypography,
-        colorScheme = LightColorScheme
-    ){
-        HomeScreen()
-    }
-
-}
+//@Preview
+//@Composable
+//fun HomeScreenPreview(){
+//    MaterialTheme(
+//        typography = defTypography,
+//        colorScheme = LightColorScheme
+//    ){
+//        HomeScreen()
+//    }
+//
+//}

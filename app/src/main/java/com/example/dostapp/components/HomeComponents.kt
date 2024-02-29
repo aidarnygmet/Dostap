@@ -50,7 +50,7 @@ fun SquareCard(
     modifier: Modifier = Modifier.size(width = 200.dp, height = 260.dp),
     eventCard: EventCard
 ){
-    OutlinedCard(shape= RoundedCornerShape(20.dp) ,modifier = modifier, border = BorderStroke(0.5.dp, color = Color(0xFFAFAFAF))) {
+    OutlinedCard(shape= RoundedCornerShape(20.dp) ,modifier = modifier.size(width = 200.dp, height = 260.dp), border = BorderStroke(0.5.dp, color = Color(0xFFAFAFAF))) {
         Box(modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)) {

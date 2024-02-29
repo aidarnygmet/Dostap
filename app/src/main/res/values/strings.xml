@@ -33,8 +33,18 @@
     <string name= "login_button">Вход</string>
     <string name= "login_reg_text">Нет аккаунта?</string>
     <string name= "login_reg_button">Создайте Аккаунт</string>
-
-
+    <string name="promo">Промо</string>
+    <string name="nearest">Nearest your location</string>
+    <string name="choose_location">Choose the location you want</string>
+    <string name="article">Article</string>
+    <string name="category">Категория</string>
+    <string name="participants">Количество участников</string>
+    <string name="descr">Описание</string>
+    <string name="place">Место Встречи</string>
+    <string name="things">Что взять с собой</string>
+    <string name="football">Футбольный мяч</string>
+    <string name="organizer">Организатор</string>
+    <string name="going">Идут</string>
 
 
 </resources>

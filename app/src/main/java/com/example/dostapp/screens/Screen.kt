@@ -8,6 +8,7 @@ sealed class Screen(val route: String){
     object NotificationsScreen: Screen("notifications")
     object ChatsScreen: Screen("chats")
     object ProfileScreen: Screen("profile")
+    object ExpandedEventScreen: Screen("expanded_event")
     fun withArgs(vararg args: String): String{
         return buildString{
             append(route)
