@@ -1,7 +1,6 @@
-package com.example.dostapp.screens
+package com.example.dostapp.auth.presentation.composable
 
 import android.util.Log
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,29 +19,24 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.dostapp.R
 import com.example.dostapp.ui.theme.LightColorScheme
 import com.example.dostapp.ui.theme.defTypography
 
 @Composable
-fun onBoarding(
+fun OnBoarding(
     params: OnBoardingData
 ){
     Box(modifier = Modifier
@@ -132,7 +126,7 @@ data class OnBoardingData(
 )
 @Preview
 @Composable
-fun onBoardingPreview(){
+fun OnBoardingPreview(){
     val context  = LocalContext.current
     val params = OnBoardingData(
         label = context.getString(R.string.onBoarding1_label),
@@ -162,7 +156,7 @@ fun onBoardingPreview(){
         colorScheme = LightColorScheme,
         typography = defTypography
     ) {
-        onBoarding(params3)
+        OnBoarding(params3)
         Log.d("test", MaterialTheme.typography.toString())
     }
 

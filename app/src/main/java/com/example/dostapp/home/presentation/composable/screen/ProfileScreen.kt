@@ -1,21 +1,19 @@
-package com.example.dostapp.screens
+package com.example.dostapp.home.presentation.composable.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.dostapp.components.AboutProfile
-import com.example.dostapp.components.BasicProfileInfo
-import com.example.dostapp.components.TopBar
+import com.example.dostapp.home.presentation.composable.component.AboutProfile
+import com.example.dostapp.home.presentation.composable.component.BasicProfileInfo
+import com.example.dostapp.home.presentation.composable.component.TopBar
 
 @Composable
 fun ProfileScreen(){

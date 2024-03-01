@@ -1,4 +1,4 @@
-package com.example.dostapp.screens
+package com.example.dostapp.core.data
 sealed class Screen(val route: String){
     object SignInScreen: Screen("sign_in")
     object SignUpScreen: Screen("sign_up")

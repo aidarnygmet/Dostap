@@ -1,41 +1,44 @@
-package com.example.dostapp.screens
+package com.example.dostapp.home.presentation.composable.screen
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.dostapp.R
-import com.example.dostapp.data.EventCard
+import com.example.dostapp.core.data.Screen
+import com.example.dostapp.home.data.model.EventCard
 
 @Composable
 fun MainNavHost(
     modifier: Modifier,
     navController: NavHostController,
-    startDestination: String,
-    navigateTo: (route: String) -> Unit
+    startDestination: String
 ){
     NavHost(navController = navController, startDestination = startDestination, modifier = modifier){
-        composable(Screen.HomeScreen.route,
+        composable(
+            Screen.HomeScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
-            HomeScreen(navController, onClick = {
+            HomeScreen(onClick = {
                 navController.navigate(Screen.ExpandedEventScreen.route)
             })
         }
-        composable(Screen.NotificationsScreen.route,
+        composable(
+            Screen.NotificationsScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
             NotificationScreen()
         }
-        composable(Screen.ChatsScreen.route,
+        composable(
+            Screen.ChatsScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
             ChatsScreen()
         }
-        composable(Screen.ProfileScreen.route,
+        composable(
+            Screen.ProfileScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
             ProfileScreen()

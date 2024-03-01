@@ -1,4 +1,4 @@
-package com.example.dostapp.screens
+package com.example.dostapp.home.presentation.composable.screen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

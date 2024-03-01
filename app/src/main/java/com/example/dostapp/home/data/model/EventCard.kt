@@ -1,4 +1,4 @@
-package com.example.dostapp.data
+package com.example.dostapp.home.data.model
 
 data class EventCard(
     val name: String,

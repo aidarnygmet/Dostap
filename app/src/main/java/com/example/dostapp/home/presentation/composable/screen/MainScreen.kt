@@ -1,4 +1,4 @@
-package com.example.dostapp.screens
+package com.example.dostapp.home.presentation.composable.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -29,9 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.dostapp.R
+import com.example.dostapp.core.data.Screen
 
 data class BottomNavigationItem(
     val title: String,
@@ -43,14 +43,14 @@ data class BottomNavigationItem(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavHostController, navigateTo: (route: String)->Unit){
+fun MainScreen(){
     val navController = rememberNavController()
     val items = listOf(
-        BottomNavigationItem(title=Screen.HomeScreen.route,selectedIcon = Icons.Filled.Home, unselectedIcon = Icons.Outlined.Home),
-        BottomNavigationItem(title=Screen.NotificationsScreen.route,selectedIcon = ImageVector.vectorResource(R.drawable.notification_filled), unselectedIcon = ImageVector.vectorResource(R.drawable.notification_outlined), hasNews = true),
+        BottomNavigationItem(title= Screen.HomeScreen.route,selectedIcon = Icons.Filled.Home, unselectedIcon = Icons.Outlined.Home),
+        BottomNavigationItem(title= Screen.NotificationsScreen.route,selectedIcon = ImageVector.vectorResource(R.drawable.notification_filled), unselectedIcon = ImageVector.vectorResource(R.drawable.notification_outlined), hasNews = true),
         BottomNavigationItem(title="new",selectedIcon = Icons.Filled.Add, unselectedIcon = Icons.Outlined.Add),
-        BottomNavigationItem(title=Screen.ChatsScreen.route,selectedIcon = ImageVector.vectorResource(R.drawable.forum_filled), unselectedIcon = ImageVector.vectorResource(R.drawable.forum_outlined), badgeCount = 7),
-        BottomNavigationItem(title=Screen.ProfileScreen.route,selectedIcon = Icons.Filled.Person, unselectedIcon = Icons.Outlined.Person),
+        BottomNavigationItem(title= Screen.ChatsScreen.route,selectedIcon = ImageVector.vectorResource(R.drawable.forum_filled), unselectedIcon = ImageVector.vectorResource(R.drawable.forum_outlined), badgeCount = 7),
+        BottomNavigationItem(title= Screen.ProfileScreen.route,selectedIcon = Icons.Filled.Person, unselectedIcon = Icons.Outlined.Person),
     )
     var selectedItemIndex by rememberSaveable {
         mutableStateOf(0)
@@ -105,7 +105,7 @@ fun MainScreen(navController: NavHostController, navigateTo: (route: String)->Un
         ) {
 
             Column(modifier = Modifier.fillMaxSize()) {
-MainNavHost(modifier = Modifier, navController = navController, startDestination = Screen.HomeScreen.route, navigateTo = navigateTo)
+MainNavHost(modifier = Modifier, navController = navController, startDestination = Screen.HomeScreen.route)
             }
 
         }
