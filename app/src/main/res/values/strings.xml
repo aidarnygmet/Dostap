@@ -14,7 +14,7 @@
     <string name= "reg_label">Регистрация</string>
     <string name= "reg_name_label">Имя</string>
     <string name= "reg_name_placeholder">Ваше Имя</string>
-    <string name= "reg_email_label">email</string>
+    <string name= "reg_email_label">Email</string>
     <string name= "reg_email_placeholder">youremail@gmail.com</string>
     <string name= "reg_password_label">Пароль</string>
     <string name= "reg_confirm_label">Подтвердите Пароль</string>
@@ -45,6 +45,13 @@
     <string name="football">Футбольный мяч</string>
     <string name="organizer">Организатор</string>
     <string name="going">Идут</string>
+    <string name="rating">Рейтинг</string>
+    <string name="meet_location">Место Встречи</string>
+    <string name="my_profile">Мой Профиль</string>
+    <string name="profile_name">Имя</string>
+    <string name="profile_age">Возраст</string>
+    <string name="profile_cities">Город(-а):</string>
+    <string name="about_profile">Про Меня</string>
 
 
 </resources>

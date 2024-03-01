@@ -38,6 +38,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.dostapp.R
+import com.example.dostapp.components.Description
+import com.example.dostapp.components.FirstRow
+import com.example.dostapp.components.Location
+import com.example.dostapp.components.Things
+import com.example.dostapp.components.ToTake
 import com.example.dostapp.data.EventCard
 import com.example.dostapp.ui.theme.LightColorScheme
 import com.example.dostapp.ui.theme.defTypography
@@ -46,6 +51,15 @@ import com.example.dostapp.ui.theme.defTypography
 @Composable
 fun ExpandedEventScreen(eventCard: EventCard, navController: NavController){
     val context = LocalContext.current
+    val descr = "Футбол в парке предлагает молодежи уникальную возможность собраться вместе, вдохновиться игрой и создать дружескую обстановку, в которой каждый может выразить свои спортивные навыки, весело провести время и насладиться активным общением."
+    val things = listOf(
+        Things(R.drawable.group, "Футбольный мяч"),
+        Things(R.drawable.group, "Попить(По желанию)"),
+        Things(R.drawable.group, "Поесть (По желанию)"),
+        Things(R.drawable.group, "Хорошее Настроение"),
+        Things(R.drawable.group, "Одежда"),
+        Things(R.drawable.group, "Жел")
+    )
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -96,52 +110,13 @@ fun ExpandedEventScreen(eventCard: EventCard, navController: NavController){
                 }
             }
             Spacer(modifier = Modifier.size(20.dp))
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)){
-                Column {
-                    Text(text = context.getString(R.string.category))
-                    Text(text = eventCard.category)
-                }
-                Spacer(modifier = Modifier.size(20.dp))
-                Divider(color = Color.Gray, modifier = Modifier
-                    .fillMaxHeight()
-                    .width(1.dp))
-                Spacer(modifier = Modifier.size(20.dp))
-                Image(painter = painterResource(id = R.drawable.calendar), contentDescription = "calendar")
-                Spacer(modifier = Modifier.size(40.dp))
-                Column {
-                    Text(text = context.getString(R.string.participants))
-                    Text(text = eventCard.category)
-                }
-
-            }
+            FirstRow(category = eventCard.category, participants = "10-20", rating = eventCard.rating)
             Spacer(modifier = Modifier.size(20.dp))
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)){
-                Image(painter = painterResource(id = R.drawable.ic_launcher_foreground), contentDescription = "organ")
-                Column {
-                    Text(text = context.getString(R.string.organizer))
-                    Text(text = eventCard.category)
-                }
-                Spacer(modifier = Modifier.size(20.dp))
-                Divider(color = Color.Gray, modifier = Modifier
-                    .fillMaxHeight()
-                    .width(1.dp))
-                Spacer(modifier = Modifier.size(20.dp))
-                Column {
-                    Text(text = context.getString(R.string.going))
-                    Text(text = eventCard.category)
-                }
-
-            }
-            Text(text = context.getString(R.string.descr))
-            Text(text = "Placeholder description")
-            Text(text = context.getString(R.string.place))
-            //map composable
-            Text(text = context.getString(R.string.things))
-            ThingsToTake(pic = R.drawable.group, descr = context.getString(R.string.football))
+            Description(descr = descr)
+            Spacer(modifier = Modifier.size(20.dp))
+            Location()
+            Spacer(modifier = Modifier.size(20.dp))
+            //ToTake(things = things)
         }
     }
 

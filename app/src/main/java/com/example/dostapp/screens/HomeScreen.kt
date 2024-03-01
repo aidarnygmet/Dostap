@@ -38,15 +38,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.dostapp.R
+import com.example.dostapp.components.ArticleBlock
+import com.example.dostapp.components.ChooseLocationBlock
+import com.example.dostapp.components.NearestYourLocationBlock
+import com.example.dostapp.components.PopularNearbyBlock
+import com.example.dostapp.components.PromoBlock
 import com.example.dostapp.components.RectangleCard
+import com.example.dostapp.components.SpecialForYouBlock
 import com.example.dostapp.components.SquareCard
 import com.example.dostapp.data.EventCard
 import com.example.dostapp.ui.theme.LightColorScheme
 import com.example.dostapp.ui.theme.defTypography
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavController, onClick: (EventCard)->Unit){
     val context = LocalContext.current
     val eventCard = EventCard(
         name = "Футбол на Ботаническом", address = "Ботанический Парк, Астана", time ="Суббота, 24.10 в 17:00",
@@ -56,6 +63,14 @@ fun HomeScreen(navController: NavController){
         name = "Open Air на Expo", address = "EXPO 2017, Astana", time ="Пятница, 23.10 в 19:00",
         rating = 4.7F, category = "Open Air",
         pic = R.drawable.expo)
+    val eventCards = listOf(
+        eventCard,
+        eventCard2,
+        eventCard,
+        eventCard2,
+        eventCard,
+        eventCard2,
+    )
     Surface(modifier = Modifier
         .fillMaxSize()
         .padding(bottom = 56.dp),
@@ -75,120 +90,12 @@ fun HomeScreen(navController: NavController){
             Spacer(modifier = Modifier.size(20.dp))
             SearchBar(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.size(20.dp))
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-                ){
-                Text(
-                    text = context.getString(R.string.for_you),
-                    style = MaterialTheme.typography.headlineLarge
-                )
-                Text(
-                    text = context.getString(R.string.view_everything),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            LazyRow(){
-                items(5){item->
-                    if(item%2==0){
-                        SquareCard(eventCard = eventCard, modifier = Modifier.clickable {
-                            navController.navigate(Screen.ExpandedEventScreen.route)
-                        })
-                    } else {
-                        SquareCard(eventCard = eventCard2)
-                    }
-                    Spacer(modifier = Modifier.size(20.dp))
-                }
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Text(
-                    text = context.getString(R.string.popular_nearby),
-                    style = MaterialTheme.typography.headlineLarge
-                )
-                Text(
-                    text = context.getString(R.string.view_everything),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            Column {
-                for(i in 0 .. 5) {
-                    if(i%2==0){
-                        RectangleCard(eventCard = eventCard)
-                    } else {
-                        RectangleCard(eventCard = eventCard2)
-                    }
-                    Spacer(modifier = Modifier.size(15.dp))
-                }
-            }
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Text(
-                    modifier = Modifier.fillMaxWidth(.6f),
-                    text = context.getString(R.string.promo),
-                    style = MaterialTheme.typography.headlineLarge
-                )
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Text(
-                    modifier = Modifier.fillMaxWidth(.6f),
-                    text = context.getString(R.string.nearest),
-                    style = MaterialTheme.typography.headlineLarge
-                )
-                Text(
-                    text = context.getString(R.string.view_everything),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Text(
-                    modifier = Modifier.fillMaxWidth(.6f),
-                    text = context.getString(R.string.choose_location),
-                    style = MaterialTheme.typography.headlineLarge
-                )
-                Text(
-                    text = context.getString(R.string.view_everything),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Text(
-                    modifier = Modifier.fillMaxWidth(.6f),
-                    text = context.getString(R.string.article),
-                    style = MaterialTheme.typography.headlineLarge,
-
-                )
-                Text(
-                    text = context.getString(R.string.view_everything),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            Spacer(modifier = Modifier.size(20.dp))
+            SpecialForYouBlock(eventCards = eventCards, onClick = onClick)
+            PopularNearbyBlock(eventCards = eventCards)
+            PromoBlock()
+            NearestYourLocationBlock(eventCards = eventCards, onClick = {})
+            ChooseLocationBlock(eventCards = eventCards, onClick = {})
+            ArticleBlock(eventCards = eventCards, onClick = {})
         }
     }
 }
@@ -196,6 +103,7 @@ fun HomeScreen(navController: NavController){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(modifier: Modifier = Modifier){
+
     val context = LocalContext.current
     var searchText by remember {
         mutableStateOf("")
@@ -209,14 +117,15 @@ fun SearchBar(modifier: Modifier = Modifier){
         placeholder = { Text(text = context.getString(R.string.search))}
     )
 }
-//@Preview
-//@Composable
-//fun HomeScreenPreview(){
-//    MaterialTheme(
-//        typography = defTypography,
-//        colorScheme = LightColorScheme
-//    ){
-//        HomeScreen()
-//    }
-//
-//}
+@Preview
+@Composable
+fun HomeScreenPreview(){
+    val navController = rememberNavController()
+    MaterialTheme(
+        typography = defTypography,
+        colorScheme = LightColorScheme
+    ){
+        HomeScreen(navController, onClick = {})
+    }
+
+}

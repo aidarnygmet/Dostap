@@ -158,6 +158,7 @@ val defTypography = Typography(
     bodySmall = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
+        lineHeight = 20.sp
     ),
     labelSmall = TextStyle(
         fontWeight = FontWeight.Light,
@@ -166,6 +167,10 @@ val defTypography = Typography(
     labelMedium = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 10.sp,
+    ),
+    labelLarge = TextStyle(
+        fontWeight = FontWeight.Light,
+        fontSize = 14.sp
     )
 
 )

@@ -21,7 +21,9 @@ fun MainNavHost(
         composable(Screen.HomeScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
-            HomeScreen(navController)
+            HomeScreen(navController, onClick = {
+                navController.navigate(Screen.ExpandedEventScreen.route)
+            })
         }
         composable(Screen.NotificationsScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},

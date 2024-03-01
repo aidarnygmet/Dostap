@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +29,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -47,10 +52,18 @@ import com.example.dostapp.ui.theme.defTypography
 
 @Composable
 fun SquareCard(
-    modifier: Modifier = Modifier.size(width = 200.dp, height = 260.dp),
-    eventCard: EventCard
+    modifier: Modifier = Modifier,
+    eventCard: EventCard,
+    onClick: (EventCard)->Unit
 ){
-    OutlinedCard(shape= RoundedCornerShape(20.dp) ,modifier = modifier.size(width = 200.dp, height = 260.dp), border = BorderStroke(0.5.dp, color = Color(0xFFAFAFAF))) {
+    OutlinedCard(
+        shape= RoundedCornerShape(20.dp),
+        modifier = modifier
+            .size(width = 200.dp, height = 260.dp)
+            .clickable {
+                onClick(eventCard)
+            },
+        border = BorderStroke(0.5.dp, color = Color(0xFFAFAFAF))) {
         Box(modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)) {
@@ -96,9 +109,9 @@ fun SquareCard(
     }
 }
 @Composable
-fun RectangleCard(modifier: Modifier = Modifier.size(width = 380.dp, height = 90.dp),
+fun RectangleCard(modifier: Modifier = Modifier,
                   eventCard: EventCard){
-        OutlinedCard(shape= RoundedCornerShape(20.dp) ,modifier = modifier, border = BorderStroke(0.5.dp, color = Color(0xFFAFAFAF))) {
+        OutlinedCard(shape= RoundedCornerShape(20.dp) ,modifier = modifier.size(width = 380.dp, height = 90.dp), border = BorderStroke(0.5.dp, color = Color(0xFFAFAFAF))) {
             Row(modifier = Modifier) {
                 Image(painter = painterResource(id = eventCard.pic), contentDescription = "",
                     modifier = Modifier
@@ -141,6 +154,200 @@ fun RectangleCard(modifier: Modifier = Modifier.size(width = 380.dp, height = 90
 
         }
 }
+@Composable
+fun SpecialForYouBlock(
+    eventCards: List<EventCard>,
+    onClick: (EventCard) -> Unit
+){
+    val context = LocalContext.current
+    Column {
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                text = context.getString(R.string.for_you),
+                style = MaterialTheme.typography.headlineLarge
+            )
+            Text(
+                text = context.getString(R.string.view_everything),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        LazyRow(){
+            items(eventCards){item->
+                SquareCard(eventCard = item, onClick = {onClick(it)})
+                Spacer(modifier = Modifier.size(20.dp))
+            }
+        }
+    }
+    Spacer(modifier = Modifier.size(20.dp))
+}
+@Composable
+fun PopularNearbyBlock(eventCards: List<EventCard>){
+    val context = LocalContext.current
+    Column {
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                text = context.getString(R.string.popular_nearby),
+                style = MaterialTheme.typography.headlineLarge
+            )
+            Text(
+                text = context.getString(R.string.view_everything),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        Column {
+            eventCards.forEach {
+                RectangleCard(eventCard = it)
+                Spacer(modifier = Modifier.size(20.dp))
+            }
+        }
+    }
+}
+@Composable
+fun PromoBox(){
+    OutlinedCard(
+        shape= RoundedCornerShape(20.dp),
+        border = BorderStroke(0.5.dp, color = Color(0xFFAFAFAF)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(70.dp),
+
+        ){
+        Box(modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+            ){
+            Text(text = "Promo")
+        }
+
+    }
+}
+@Composable
+fun PromoBlock(){
+    val context = LocalContext.current
+    Column {
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                modifier = Modifier.fillMaxWidth(.6f),
+                text = context.getString(R.string.promo),
+                style = MaterialTheme.typography.headlineLarge
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        PromoBox()
+    }
+}
+@Composable
+fun NearestCard(){
+
+}
+@Composable
+fun NearestYourLocationBlock(
+    eventCards: List<EventCard>,
+    onClick: () -> Unit
+){
+    val context = LocalContext.current
+    Column {
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                modifier = Modifier.fillMaxWidth(.6f),
+                text = context.getString(R.string.nearest),
+                style = MaterialTheme.typography.headlineLarge
+            )
+            Text(
+                text = context.getString(R.string.view_everything),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        LazyRow(){
+            items(eventCards){item->
+                SquareCard(eventCard = item, onClick = {})
+                Spacer(modifier = Modifier.size(20.dp))
+            }
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+    }
+}
+@Composable
+fun ChooseLocationBlock(
+    eventCards: List<EventCard>,
+    onClick: () -> Unit
+){
+    val context = LocalContext.current
+    Column {
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                modifier = Modifier.fillMaxWidth(.6f),
+                text = context.getString(R.string.choose_location),
+                style = MaterialTheme.typography.headlineLarge
+            )
+            Text(
+                text = context.getString(R.string.view_everything),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        LazyRow(){
+            items(eventCards){item->
+                SquareCard(eventCard = item, onClick = {  })
+                Spacer(modifier = Modifier.size(20.dp))
+            }
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+    }
+}
+@Composable
+fun ArticleBlock(
+    eventCards: List<EventCard>,
+    onClick: () -> Unit
+){
+    val context = LocalContext.current
+    Column {
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                modifier = Modifier.fillMaxWidth(.6f),
+                text = context.getString(R.string.article),
+                style = MaterialTheme.typography.headlineLarge
+            )
+            Text(
+                text = context.getString(R.string.view_everything),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        LazyRow(){
+            items(eventCards){item->
+                SquareCard(eventCard = item, onClick = {})
+                Spacer(modifier = Modifier.size(20.dp))
+            }
+        }
+    }
+}
 @Preview
 @Composable
 fun SquaredCardPreview(){
@@ -152,11 +359,23 @@ fun SquaredCardPreview(){
         name = "Open Air на Expo", address = "EXPO 2017, Astana", time ="Пятница, 23.10 в 19:00",
         rating = 4.7F, category = "Open Air",
         pic = R.drawable.expo)
+    val eventCards = listOf(
+        eventCard,
+        eventCard2,
+        eventCard,
+        eventCard2,
+        eventCard,
+        eventCard2,
+    )
     MaterialTheme(
         typography = defTypography,
         colorScheme = LightColorScheme
     ){
-        RectangleCard(eventCard = eventCard)
+        Surface {
+            ArticleBlock(eventCards = eventCards, onClick = {})
+        }
+        //RectangleCardColumn(eventCards = eventCards)
+
     }
 
 

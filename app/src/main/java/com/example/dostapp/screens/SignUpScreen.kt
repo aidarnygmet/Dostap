@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -125,12 +126,14 @@ fun SignUpScreen(
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
-                        placeholder={ Text(text = context.getString(R.string.reg_name_placeholder), style = MaterialTheme.typography.labelSmall)},
+                        textStyle = MaterialTheme.typography.labelLarge,
+                        placeholder={ Text(modifier = Modifier.fillMaxSize(), text = context.getString(R.string.reg_name_placeholder), style = MaterialTheme.typography.labelLarge)},
                         value = username,
                         onValueChange = { username = it },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(45.dp)
+                            .wrapContentHeight(align = Alignment.CenterVertically)
+
                         ,
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Email
@@ -146,11 +149,11 @@ fun SignUpScreen(
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
                         value = email,
+                        textStyle = MaterialTheme.typography.labelLarge,
                         onValueChange = { email = it },
-                        placeholder={ Text(text = context.getString(R.string.reg_email_placeholder), style = MaterialTheme.typography.labelSmall)},
+                        placeholder={ Text(modifier = Modifier.fillMaxSize(), text = context.getString(R.string.reg_email_placeholder), style = MaterialTheme.typography.labelLarge)},
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(45.dp)
                         ,
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Email
@@ -166,14 +169,14 @@ fun SignUpScreen(
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
                         value = password,
+                        textStyle = MaterialTheme.typography.labelLarge,
                         onValueChange = { password = it },
-                        placeholder={ Text(text = "********", style = MaterialTheme.typography.labelSmall,
+                        placeholder={ Text(text = "********", style = MaterialTheme.typography.labelLarge,
                             modifier = Modifier
                                 .fillMaxWidth()
                         )},
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(45.dp)
                         ,
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
                         visualTransformation = PasswordVisualTransformation(),
@@ -188,14 +191,14 @@ fun SignUpScreen(
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
                         value = confirm,
+                        textStyle = MaterialTheme.typography.labelLarge,
                         onValueChange = { confirm = it },
-                        placeholder={ Text(text = "********", style = MaterialTheme.typography.labelSmall,
+                        placeholder={ Text(text = "********", style = MaterialTheme.typography.labelLarge,
                             modifier = Modifier
                                 .fillMaxWidth()
                         )},
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(45.dp)
                         ,
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
                         visualTransformation = PasswordVisualTransformation(),

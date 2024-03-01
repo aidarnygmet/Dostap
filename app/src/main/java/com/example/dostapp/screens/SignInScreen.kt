@@ -99,14 +99,14 @@ fun SignInScreen(
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
+                        textStyle = MaterialTheme.typography.labelLarge,
                         value = email,
                         onValueChange = { email = it },
-                        placeholder={ Text(text = context.getString(R.string.login_login_placeholder), style = MaterialTheme.typography.labelSmall, modifier = Modifier
+                        placeholder={ Text(text = context.getString(R.string.login_login_placeholder), style = MaterialTheme.typography.labelLarge, modifier = Modifier
                             .fillMaxWidth())
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(45.dp)
                         ,
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Email
@@ -122,14 +122,14 @@ fun SignInScreen(
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
                         value = password,
+                        textStyle = MaterialTheme.typography.labelLarge,
                         onValueChange = { password = it },
-                        placeholder={ Text(text = "********", style = MaterialTheme.typography.labelSmall,
+                        placeholder={ Text(text = "********", style = MaterialTheme.typography.labelLarge,
                             modifier = Modifier
                                 .fillMaxWidth()
                         )},
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(45.dp)
                         ,
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
                         visualTransformation = PasswordVisualTransformation(),

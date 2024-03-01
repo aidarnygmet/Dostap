@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -64,14 +65,16 @@ fun onBoarding(
                 .clip(RoundedCornerShape(topStart = 48.dp, topEnd = 48.dp))
                 .background(Color(0xFFF9F9F9))
                 .padding(horizontal = 30.dp)
-                .padding(top = 47.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                .padding(top = 47.dp)
+                .padding(bottom = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
             ){
                 Text(text = params.label, style = MaterialTheme.typography.displayLarge, textAlign = TextAlign.Center)
                 Log.d("test", MaterialTheme.typography.displayLarge.fontSize.toString())
-                Spacer(modifier = Modifier.size(20.dp))
+
                 Text(text = params.body, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 22.5.dp))
-                Spacer(modifier = Modifier.size(20.dp))
+
                 Button(modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
@@ -82,7 +85,7 @@ fun onBoarding(
                     , onClick = { params.buttonClicked()}) {
                     Text(text = params.button)
                 }
-                Spacer(modifier = Modifier.size(30.dp))
+
                 Row {
                     if(params.dot == 1){
                         Dot()
