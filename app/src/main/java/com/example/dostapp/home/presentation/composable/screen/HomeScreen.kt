@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dostapp.R
 import com.example.dostapp.home.data.model.EventCard
+import com.example.dostapp.home.data.model.Promo
 import com.example.dostapp.home.presentation.composable.component.ArticleBlock
 import com.example.dostapp.home.presentation.composable.component.ChooseLocationBlock
 import com.example.dostapp.home.presentation.composable.component.NearestYourLocationBlock
@@ -56,6 +57,14 @@ fun HomeScreen(onClick: (EventCard)->Unit){
         eventCard,
         eventCard2,
     )
+    val promo = Promo(
+        title = "Astana Hikes",
+        points = listOf(
+            "-20% на первый тур",
+            "C 1.01.2024 до 1.06.2024"
+        )
+
+    )
     Surface(modifier = Modifier
         .fillMaxSize()
         .padding(bottom = 56.dp),
@@ -77,7 +86,7 @@ fun HomeScreen(onClick: (EventCard)->Unit){
             Spacer(modifier = Modifier.size(20.dp))
             SpecialForYouBlock(eventCards = eventCards, onClick = onClick)
             PopularNearbyBlock(eventCards = eventCards)
-            PromoBlock()
+            PromoBlock(promo)
             NearestYourLocationBlock(eventCards = eventCards, onClick = {})
             ChooseLocationBlock(eventCards = eventCards, onClick = {})
             ArticleBlock(eventCards = eventCards, onClick = {})

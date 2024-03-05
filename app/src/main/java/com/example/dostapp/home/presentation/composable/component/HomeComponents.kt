@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -37,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dostapp.R
 import com.example.dostapp.home.data.model.EventCard
+import com.example.dostapp.home.data.model.Promo
 import com.example.dostapp.ui.theme.LightColorScheme
 import com.example.dostapp.ui.theme.defTypography
 
@@ -204,25 +204,38 @@ fun PopularNearbyBlock(eventCards: List<EventCard>){
     }
 }
 @Composable
-fun PromoBox(){
+fun PromoBox(promo: Promo){
+    val context = LocalContext.current
     OutlinedCard(
         shape= RoundedCornerShape(20.dp),
         border = BorderStroke(0.5.dp, color = Color(0xFFAFAFAF)),
         modifier = Modifier
             .fillMaxWidth()
-            .height(70.dp),
+            .aspectRatio(3.42f),
 
         ){
-        Box(modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-            ){
-            Text(text = "Promo")
-        }
-
+        Row {
+            Image(painter = painterResource(id = R.drawable.promo_image), contentDescription = "promo_image",
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(.36f),
+                contentScale = ContentScale.Crop)
+            Column(modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()
+                .background(Color(0xFF1A8EEA))
+                .padding(horizontal = 30.dp, vertical = 5.dp)) {
+                Text(text = promo.title)
+                promo.points.forEach {
+                    Text(text = "* $it")
+                }
+                Text(text = "*"+context.getString(R.string.details))
+            }
+            }
     }
 }
 @Composable
-fun PromoBlock(){
+fun PromoBlock(promo: Promo){
     val context = LocalContext.current
     Column {
         Row (
@@ -237,7 +250,7 @@ fun PromoBlock(){
             )
         }
         Spacer(modifier = Modifier.size(20.dp))
-        PromoBox()
+        PromoBox(promo)
     }
 }
 @Composable
@@ -358,12 +371,19 @@ fun SquaredCardPreview(){
         eventCard,
         eventCard2,
     )
+    val promo = Promo(
+        title = "Astana Hikes",
+        points = listOf(
+            "-20% на первый тур",
+            "C 1.01.2024 до 1.06.2024"
+        )
+    )
     MaterialTheme(
         typography = defTypography,
         colorScheme = LightColorScheme
     ){
         Surface {
-            ArticleBlock(eventCards = eventCards, onClick = {})
+            PromoBox(promo)
         }
         //RectangleCardColumn(eventCards = eventCards)
 

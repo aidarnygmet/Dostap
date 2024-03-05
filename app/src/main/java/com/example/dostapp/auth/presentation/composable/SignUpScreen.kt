@@ -1,5 +1,6 @@
 package com.example.dostapp.auth.presentation.composable
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +34,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,17 +52,22 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dostapp.R
+import com.example.dostapp.auth.data.model.AuthResult
+import com.example.dostapp.auth.presentation.viewmodel.AuthViewModel
 import com.example.dostapp.ui.theme.LightColorScheme
 import com.example.dostapp.ui.theme.defTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
+    viewModel: AuthViewModel = viewModel(),
     onSignInClicked: ()->Unit,
-    onSignUpClicked: (String, String, String) -> Unit,
+    signUp: (String) -> Unit,
     onGoogleSignInClicked: () -> Unit
 ){
+    val context = LocalContext.current
     var email by remember {
         mutableStateOf("")
     }
@@ -78,8 +86,7 @@ fun SignUpScreen(
     var check2 by remember {
         mutableStateOf(false)
     }
-
-    val context = LocalContext.current
+    val isLoading by viewModel.isLoading.collectAsState()
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color(0xFF1A8EEA))
@@ -133,6 +140,7 @@ fun SignUpScreen(
                         shape = RoundedCornerShape(44.dp),
                         value = email,
                         textStyle = MaterialTheme.typography.labelLarge,
+                        isError = !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() && email !="",
                         onValueChange = { email = it },
                         placeholder={ Text(modifier = Modifier.fillMaxSize(), text = context.getString(R.string.reg_email_placeholder), style = MaterialTheme.typography.labelLarge)},
                         modifier = Modifier
@@ -176,6 +184,7 @@ fun SignUpScreen(
                         value = confirm,
                         textStyle = MaterialTheme.typography.labelLarge,
                         onValueChange = { confirm = it },
+                        isError = password!=confirm && confirm!="",
                         placeholder={ Text(text = "********", style = MaterialTheme.typography.labelLarge,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -213,12 +222,19 @@ fun SignUpScreen(
                     .fillMaxWidth()
                     .height(60.dp)
                     ,
-                    enabled= check1 && check2,
+                    enabled= (check1 && check2 && !isLoading),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF1A1A1A),
                     )
-                    , onClick = { onSignUpClicked(username, email, password) }) {
-                    Text(text = context.getString(R.string.reg_button))
+                    , onClick = {
+                        viewModel.signUp(email, password, username)
+                    }) {
+                    if(isLoading){
+                        CircularProgressIndicator()
+                    } else {
+                        Text(text = context.getString(R.string.reg_button))
+                    }
+
                 }
                 Spacer(modifier = Modifier.size(10.dp))
                 Row(modifier = Modifier.fillMaxWidth(),
@@ -282,6 +298,19 @@ fun SignUpScreen(
                 }
 
 
+            }
+        }
+        val user by viewModel.user.collectAsState()
+        if(user != null){
+            when(user){
+                is AuthResult.Success -> {
+                    signUp((user as AuthResult.Success).userInfo.token)
+                }
+                is AuthResult.Error ->{
+                    Toast.makeText(context, (user as AuthResult.Error).message, Toast.LENGTH_LONG).show()
+                    viewModel.nullifyUser()
+                }
+                null -> {}
             }
         }
     }
@@ -372,7 +401,7 @@ fun PreviewSignUp(){
         colorScheme = LightColorScheme,
         typography = defTypography
     ) {
-        SignUpScreen(onSignInClicked = { /*TODO*/ }, onSignUpClicked = {a,b,c->}) {
+        SignUpScreen(onSignInClicked = { /*TODO*/ }, signUp = {a->}) {
 
         }
     }

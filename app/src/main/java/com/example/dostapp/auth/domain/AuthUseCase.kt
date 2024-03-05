@@ -2,7 +2,6 @@ package com.example.dostapp.auth.domain
 
 import com.example.dostapp.auth.data.model.AuthResult
 import com.example.dostapp.auth.data.model.UserCredentials
-import com.example.dostapp.auth.data.repository.AuthRepositoryImpl
 
 class AuthUseCase(private val authRepository: AuthRepositoryImpl) {
     suspend fun loginUser(email: String, password: String): AuthResult {

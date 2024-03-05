@@ -1,6 +1,5 @@
 package com.example.dostapp.auth.presentation.composable
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -65,7 +64,6 @@ fun OnBoarding(
                 verticalArrangement = Arrangement.SpaceBetween
             ){
                 Text(text = params.label, style = MaterialTheme.typography.displayLarge, textAlign = TextAlign.Center)
-                Log.d("test", MaterialTheme.typography.displayLarge.fontSize.toString())
 
                 Text(text = params.body, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 22.5.dp))
 
@@ -157,7 +155,6 @@ fun OnBoardingPreview(){
         typography = defTypography
     ) {
         OnBoarding(params3)
-        Log.d("test", MaterialTheme.typography.toString())
     }
 
 }

@@ -2,34 +2,50 @@ package com.example.dostapp.auth.presentation.composable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.dostapp.MyApp
 import com.example.dostapp.R
+import com.example.dostapp.auth.presentation.viewmodel.AuthViewModel
+import com.example.dostapp.auth.presentation.viewmodel.viewModelFactory
 import com.example.dostapp.core.data.Screen
 import com.example.dostapp.home.presentation.composable.screen.MainScreen
 
 @Composable
 fun Navigation(navController: NavHostController){
+    val viewModel = viewModel<AuthViewModel>(
+        factory = viewModelFactory {
+            AuthViewModel(MyApp.appModule.authRepository)
+        }
+    )
     NavHost(navController = navController, startDestination = "auth"){
         navigation(startDestination = Screen.OnBoardingScreen.withArgs("1"), route = "auth"){
             composable(Screen.SignInScreen.route){
-                SignInScreen(onGoogleSignInClicked = { }, onSignInClicked = {email, password->
-                    navController.navigate("main_screen"){
-                        popUpTo("auth"){
-                            inclusive = true
-                        }
-                    }
-
-                }, onSignUpClicked = {
+                SignInScreen(onGoogleSignInClicked = { },
+                navController = navController
+                ,
+                onSignUpClicked = {
                     navController.navigate(Screen.SignUpScreen.route)
-                })
+                },
+                viewModel = viewModel)
             }
             composable(Screen.SignUpScreen.route){
-                SignUpScreen(onSignInClicked = { navController.navigate(Screen.SignInScreen.route) }, onSignUpClicked = { a, b, c->
-
-                }, onGoogleSignInClicked = {})
+                SignUpScreen(
+                    onSignInClicked = {
+                        navController.navigate(Screen.SignInScreen.route)
+                    },
+                    signUp = { token->
+                        navController.navigate("main_screen"){
+                            popUpTo("auth"){
+                                inclusive = true
+                            }
+                        }
+                    },
+                    onGoogleSignInClicked = {},
+                    viewModel = viewModel)
             }
             composable(Screen.OnBoardingScreen.route+"/1"){
                 val context = LocalContext.current
@@ -72,7 +88,6 @@ fun Navigation(navController: NavHostController){
             composable(Screen.MainScreen.route){
                 MainScreen()
             }
-
         }
 
 

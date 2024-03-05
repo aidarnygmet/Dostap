@@ -7,8 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.dostapp.R
+import com.example.dostapp.auth.data.model.Category
 import com.example.dostapp.core.data.Screen
 import com.example.dostapp.home.data.model.EventCard
+import com.example.dostapp.home.data.model.ProfileData
 
 @Composable
 fun MainNavHost(
@@ -41,7 +43,25 @@ fun MainNavHost(
             Screen.ProfileScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
-            ProfileScreen()
+            val test = ProfileData(
+                username="username.xyz",
+                profilePic = R.drawable.ronaldo,
+                age = 22,
+                city = "Astana",
+                firstName = "Дос",
+                friendsCount = 15,
+                aboutUser = listOf(
+                    "Ценитель старого кино",
+                    "Путешественник, любитель кофе и кулинарный энтузиаст",
+                    "NU, 2022",
+                ),
+                interests = listOf(
+                    Category.Chess,
+                    Category.Box,
+                    Category.Skates
+                )
+            )
+            ProfileScreen(test)
         }
         composable(Screen.ExpandedEventScreen.route){
             val eventCard = EventCard(

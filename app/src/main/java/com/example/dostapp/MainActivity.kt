@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         setContent {
             DostappTheme {
+
                 val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(

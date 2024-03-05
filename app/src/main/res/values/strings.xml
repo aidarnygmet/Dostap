@@ -52,6 +52,16 @@
     <string name="profile_age">Возраст</string>
     <string name="profile_cities">Город(-а):</string>
     <string name="about_profile">Про Меня</string>
+    <string name="details">Подробнее</string>
+    <string name="skates">Коньки</string>
+    <string name="box">Бокс</string>
+    <string name="chess">Шахматы</string>
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="choose_interests">Выберите свои интересы</string>
+    <string name="popular_category">Популярное</string>
+    <string name="sports_category">Спорт</string>
+    <string name="arts_category">Искусство</string>
+    <string name="friends">Друзья</string>
 
 
 </resources>
