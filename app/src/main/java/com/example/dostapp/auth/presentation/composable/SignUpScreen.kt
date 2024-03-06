@@ -90,15 +90,7 @@ fun SignUpScreen(
             }
         }
     }
-    var email by remember {
-        mutableStateOf("")
-    }
-    var username by remember {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
+
     var confirm by remember {
         mutableStateOf("")
     }
@@ -161,7 +153,7 @@ fun SignUpScreen(
                         shape = RoundedCornerShape(44.dp),
                         value = viewModel.state.signUpEmail,
                         textStyle = MaterialTheme.typography.labelLarge,
-                        isError = !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() && email !="",
+                        isError = !android.util.Patterns.EMAIL_ADDRESS.matcher(viewModel.state.signUpEmail).matches() && viewModel.state.signUpEmail !="",
                         onValueChange = { viewModel.onEvent(AuthUiEvent.SignUpEmailChanged(it)) },
                         placeholder={ Text(modifier = Modifier.fillMaxSize(), text = context.getString(R.string.reg_email_placeholder), style = MaterialTheme.typography.labelLarge)},
                         modifier = Modifier

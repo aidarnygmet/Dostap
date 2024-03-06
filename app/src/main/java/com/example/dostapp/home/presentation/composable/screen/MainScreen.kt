@@ -43,7 +43,9 @@ data class BottomNavigationItem(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(){
+fun MainScreen(
+    navigateToAuth: ()->Unit
+){
     val navController = rememberNavController()
     val items = listOf(
         BottomNavigationItem(title= Screen.HomeScreen.route,selectedIcon = Icons.Filled.Home, unselectedIcon = Icons.Outlined.Home),
@@ -105,7 +107,12 @@ fun MainScreen(){
         ) {
 
             Column(modifier = Modifier.fillMaxSize()) {
-MainNavHost(modifier = Modifier, navController = navController, startDestination = Screen.HomeScreen.route)
+            MainNavHost(
+                modifier = Modifier,
+                navController = navController,
+                startDestination = Screen.HomeScreen.route,
+                navigateToAuth = navigateToAuth
+            )
             }
 
         }

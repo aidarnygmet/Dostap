@@ -15,6 +15,7 @@ import com.google.android.gms.location.LocationServices
 
 class MainActivity : ComponentActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,5 +35,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
 

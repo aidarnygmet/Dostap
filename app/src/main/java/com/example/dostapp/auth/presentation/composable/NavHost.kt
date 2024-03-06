@@ -1,6 +1,8 @@
 package com.example.dostapp.auth.presentation.composable
 
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -9,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.dostapp.MyApp
 import com.example.dostapp.R
+import com.example.dostapp.auth.data.model.AuthResult
 import com.example.dostapp.auth.presentation.viewmodel.AuthViewModel
 import com.example.dostapp.auth.presentation.viewmodel.viewModelFactory
 import com.example.dostapp.core.data.Screen
@@ -22,7 +25,7 @@ fun Navigation(navController: NavHostController){
         }
     )
     NavHost(navController = navController, startDestination = "auth"){
-        navigation(startDestination = Screen.OnBoardingScreen.withArgs("1"), route = "auth"){
+        navigation(startDestination = Screen.LoadingScreen.route, route = "auth"){
             composable(Screen.SignInScreen.route){
                 SignInScreen(
                 navController = navController,
@@ -69,13 +72,53 @@ fun Navigation(navController: NavHostController){
                 )
                 OnBoarding(params)
             }
+            composable(Screen.LoadingScreen.route){
+                LaunchedEffect(viewModel){
+                    viewModel.authResult.collect{result->
+                        when(result){
+                            is AuthResult.Authorized -> {
+                                navController.navigate(Screen.MainScreen.route){
+                                    popUpTo(Screen.MainScreen.route){
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                            is AuthResult.Unauthorized -> {
+                                navController.navigate(
+                                    if(isFirstTimeLaunch()){
+                                        Screen.OnBoardingScreen.withArgs("/1")
+                                    } else {
+                                        Screen.SignUpScreen.route
+                                    }
+                                ){
+                                    popUpTo(Screen.LoadingScreen.route){
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                            is AuthResult.UnknownError -> {}
+                        }
+                    }
+                }
+                CircularProgressIndicator()
+            }
         }
         navigation(startDestination = Screen.MainScreen.route, route = "main"){
             composable(Screen.MainScreen.route){
-                MainScreen()
+                MainScreen(
+                    navigateToAuth = {navController.navigate(Screen.SignInScreen.route)}
+                )
             }
         }
 
 
     }
+}
+fun isFirstTimeLaunch(): Boolean {
+    val prefs = MyApp.appModule.prefs
+    val isFirstTime = prefs.getBoolean("is_first_time", true)
+    if (isFirstTime) {
+        prefs.edit().putBoolean("is_first_time", false).apply()
+    }
+    return isFirstTime
 }

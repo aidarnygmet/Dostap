@@ -27,7 +27,7 @@ class AppModuleImpl(private val appContext: Context): AppModule {
         AuthRepositoryImpl(authApi = authApi, prefs = prefs)
     }
     override val prefs: SharedPreferences by lazy {
-        appContext.getSharedPreferences("dostap", 0)
+        appContext.getSharedPreferences("dostap", Context.MODE_PRIVATE)
     }
 
 }

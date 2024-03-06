@@ -2,6 +2,7 @@ package com.example.dostapp.home.presentation.composable.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,13 +26,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.dostapp.R
 import com.example.dostapp.auth.data.model.Category
+import com.example.dostapp.core.data.Screen
 import com.example.dostapp.home.data.model.ProfileData
 import com.example.dostapp.ui.theme.DostappTheme
 
 @Composable
-fun TopBar(){
+fun TopBar(navController:NavController){
     val context = LocalContext.current
     Row(modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -40,7 +43,12 @@ fun TopBar(){
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(painter = painterResource(id = R.drawable.edit), contentDescription = "edit")
             Spacer(modifier = Modifier.size(10.dp))
-            Image(painter = painterResource(id = R.drawable.settings), contentDescription = "settings")
+            Image(
+                modifier = Modifier.clickable {
+                    navController.navigate(Screen.SettingsScreen.route)
+                },
+                painter = painterResource(id = R.drawable.settings),
+                contentDescription = "settings")
         }
     }
     Spacer(modifier = Modifier.size(20.dp))

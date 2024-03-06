@@ -62,6 +62,7 @@
     <string name="sports_category">Спорт</string>
     <string name="arts_category">Искусство</string>
     <string name="friends">Друзья</string>
+    <string name="sign_out">Выйти из аккаунта</string>
 
 
 </resources>

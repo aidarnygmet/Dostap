@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.dostapp.R
 import com.example.dostapp.auth.data.model.Category
 import com.example.dostapp.home.data.model.ProfileData
@@ -17,7 +19,7 @@ import com.example.dostapp.home.presentation.composable.component.BasicProfileIn
 import com.example.dostapp.home.presentation.composable.component.TopBar
 
 @Composable
-fun ProfileScreen(profileData: ProfileData){
+fun ProfileScreen(profileData: ProfileData, navController: NavController){
     Surface(modifier = Modifier
         .fillMaxSize()
         .padding(bottom = 56.dp)){
@@ -28,7 +30,7 @@ fun ProfileScreen(profileData: ProfileData){
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
         ) {
-            TopBar()
+            TopBar(navController)
             BasicProfileInfo(profile = profileData)
         }
 
@@ -38,6 +40,7 @@ fun ProfileScreen(profileData: ProfileData){
 @Preview
 @Composable
 fun ProfilePreview(){
+    val navController = rememberNavController()
     val test = ProfileData(
         username="username.xyz",
         profilePic = R.drawable.ronaldo,
@@ -56,5 +59,5 @@ fun ProfilePreview(){
             Category.Skates
         )
     )
-    ProfileScreen(test)
+    ProfileScreen(profileData = test, navController = navController)
 }

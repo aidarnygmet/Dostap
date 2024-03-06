@@ -16,7 +16,8 @@ import com.example.dostapp.home.data.model.ProfileData
 fun MainNavHost(
     modifier: Modifier,
     navController: NavHostController,
-    startDestination: String
+    startDestination: String,
+    navigateToAuth: ()->Unit
 ){
     NavHost(navController = navController, startDestination = startDestination, modifier = modifier){
         composable(
@@ -61,7 +62,7 @@ fun MainNavHost(
                     Category.Skates
                 )
             )
-            ProfileScreen(test)
+            ProfileScreen(test, navController)
         }
         composable(Screen.ExpandedEventScreen.route){
             val eventCard = EventCard(
@@ -69,6 +70,11 @@ fun MainNavHost(
                 rating = 4.5F, category = "Футбол",
                 pic = R.drawable.ronaldo_big)
             ExpandedEventScreen(eventCard = eventCard, navController = navController)
+        }
+        composable(Screen.SettingsScreen.route){
+            SettingsScreen(
+                navigateToAuth = navigateToAuth
+            )
         }
     }
 }
