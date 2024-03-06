@@ -1,34 +1,86 @@
 package com.example.dostapp.auth.presentation.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dostapp.auth.data.model.AuthResult
-import com.example.dostapp.auth.data.model.UserCredentials
+import com.example.dostapp.auth.data.model.AuthState
+import com.example.dostapp.auth.data.model.AuthUiEvent
 import com.example.dostapp.auth.data.repository.AuthRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
-    private val _user = MutableStateFlow<AuthResult?>(null)
-    val user : StateFlow<AuthResult?> get() = _user
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> get() = _isLoading
-    fun nullifyUser(){
-        _user.value = null
+
+    var state by mutableStateOf(AuthState())
+    private val resultChannel = Channel<AuthResult<Unit>>()
+    val authResult = resultChannel.receiveAsFlow()
+    init {
+        authenticate()
     }
-    fun signIn(email: String, password: String) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            _user.value = authRepository.loginUser(UserCredentials(email, password))
-            _isLoading.value = false
+
+    fun onEvent(event: AuthUiEvent){
+        when(event){
+            is AuthUiEvent.SignInPasswordChanged -> {
+                state = state.copy(signInPassword = event.value)
+            }
+            is AuthUiEvent.SignInUsernameChanged -> {
+                state = state.copy(signInUsername = event.value)
+            }
+            is AuthUiEvent.SignIn -> {
+                signIn()
+            }
+            is AuthUiEvent.SignUpEmailChanged -> {
+                state = state.copy(signUpEmail = event.value)
+            }
+            is AuthUiEvent.SignUpPasswordChanged -> {
+                state = state.copy(signUpPassword = event.value)
+            }
+            is AuthUiEvent.SignUpUsernameChanged -> {
+                state = state.copy(signUpUsername = event.value)
+            }
+            is AuthUiEvent.SignUp -> {
+                signUp()
+            }
+
         }
     }
-    fun signUp(email: String, password: String, name: String){
+    private fun signUp(){
         viewModelScope.launch {
-            _isLoading.value = true
-            _user.value = authRepository.registerUser(UserCredentials(email, password), name)
-            _isLoading.value = false
+            state = state.copy(isLoading = true)
+            val result = authRepository.signUp(
+                email = state.signUpEmail,
+                username = state.signUpUsername,
+                password = state.signUpPassword
+            )
+            resultChannel.send(result)
+            state = state.copy(isLoading = false)
+
+        }
+    }
+    private fun signIn(){
+        viewModelScope.launch {
+            state = state.copy(isLoading = true)
+            val result = authRepository.signIn(
+                email = state.signInUsername,
+                password = state.signInPassword
+            )
+            resultChannel.send(result)
+            state = state.copy(isLoading = false)
+
+        }
+    }
+    private fun authenticate(){
+        viewModelScope.launch {
+            state = state.copy(isLoading = true)
+            val result = authRepository.authenticate(
+            )
+            resultChannel.send(result)
+            state = state.copy(isLoading = false)
+
         }
     }
 }

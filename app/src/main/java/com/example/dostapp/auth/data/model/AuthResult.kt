@@ -1,6 +1,8 @@
 package com.example.dostapp.auth.data.model
 
-sealed class AuthResult {
-    data class Success(val userInfo: UserInfo) : AuthResult()
-    data class Error(val message: String) : AuthResult()
+sealed class AuthResult<T>(val data: T? = null) {
+    class Authorized<T>(data: T? = null): AuthResult<T>(data)
+    class Unauthorized<T>: AuthResult<T>()
+    class UnknownError<T>: AuthResult<T>()
+
 }

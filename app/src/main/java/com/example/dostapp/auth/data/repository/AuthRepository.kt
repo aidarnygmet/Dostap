@@ -1,9 +1,9 @@
 package com.example.dostapp.auth.data.repository
 
 import com.example.dostapp.auth.data.model.AuthResult
-import com.example.dostapp.auth.data.model.UserCredentials
 
 interface AuthRepository {
-    suspend fun loginUser(credentials: UserCredentials): AuthResult
-    suspend fun registerUser(credentials: UserCredentials, name: String): AuthResult
+    suspend fun signUp(email: String, password: String, username: String): AuthResult<Unit>
+    suspend fun signIn(email: String, password: String): AuthResult<Unit>
+    suspend fun authenticate(): AuthResult<Unit>
 }
