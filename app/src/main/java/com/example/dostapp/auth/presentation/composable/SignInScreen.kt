@@ -29,7 +29,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,7 +51,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dostapp.R
 import com.example.dostapp.auth.data.model.AuthResult
+import com.example.dostapp.auth.data.model.AuthUiEvent
 import com.example.dostapp.auth.presentation.viewmodel.AuthViewModel
+import com.example.dostapp.core.data.Screen
 import com.example.dostapp.ui.theme.LightColorScheme
 import com.example.dostapp.ui.theme.defTypography
 
@@ -60,10 +62,9 @@ import com.example.dostapp.ui.theme.defTypography
 fun SignInScreen(
     viewModel: AuthViewModel = viewModel(),
     navController: NavController,
-    onGoogleSignInClicked: () -> Unit,
-    onSignUpClicked: () -> Unit
 )
 {
+    val state = viewModel.state
     val context = LocalContext.current
     var email by remember {
         mutableStateOf("")
@@ -71,7 +72,25 @@ fun SignInScreen(
     var password by remember {
         mutableStateOf("")
     }
-    val isLoading by viewModel.isLoading.collectAsState()
+    LaunchedEffect(viewModel, context){
+        viewModel.authResult.collect{result->
+            when(result){
+                is AuthResult.Authorized -> {
+                    navController.navigate(Screen.MainScreen.route){
+                        popUpTo(Screen.MainScreen.route){
+                            inclusive = true
+                        }
+                    }
+                }
+                is AuthResult.Unauthorized -> {
+                    Toast.makeText(context, "You are not authorized", Toast.LENGTH_LONG).show()
+                }
+                is AuthResult.UnknownError -> {
+                    Toast.makeText(context, "Unknown Error Occurred", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color(0xFF1A8EEA))
@@ -102,8 +121,8 @@ fun SignInScreen(
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
                         textStyle = MaterialTheme.typography.labelLarge,
-                        value = email,
-                        onValueChange = { email = it },
+                        value = state.signInUsername,
+                        onValueChange = { viewModel.onEvent(AuthUiEvent.SignInUsernameChanged(it)) },
                         placeholder={ Text(text = context.getString(R.string.login_login_placeholder), style = MaterialTheme.typography.labelLarge, modifier = Modifier
                             .fillMaxWidth())
                         },
@@ -124,9 +143,9 @@ fun SignInScreen(
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
-                        value = password,
+                        value = state.signInPassword,
                         textStyle = MaterialTheme.typography.labelLarge,
-                        onValueChange = { password = it },
+                        onValueChange = { viewModel.onEvent(AuthUiEvent.SignInPasswordChanged(it)) },
                         placeholder={ Text(text = "********", style = MaterialTheme.typography.labelLarge,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -151,14 +170,14 @@ fun SignInScreen(
                     .fillMaxWidth()
                     .height(60.dp)
                     ,
-                    enabled = !isLoading,
+                    enabled = !state.isLoading,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF1A1A1A),
                     )
                     , onClick = {
-                        viewModel.signIn(email, password)
+                        viewModel.onEvent(AuthUiEvent.SignIn)
                     }) {
-                    if(!isLoading){
+                    if(!state.isLoading){
                         Text(text = context.getString(R.string.login_button))
                     } else {
                         CircularProgressIndicator()
@@ -197,7 +216,7 @@ fun SignInScreen(
                             .width(70.dp)
                             .border(0.5.dp, Color(0xFF959595), MaterialTheme.shapes.medium)
                             .clickable {
-                                onGoogleSignInClicked()
+
                             },
                             contentAlignment = Alignment.Center
                         ){
@@ -224,7 +243,7 @@ fun SignInScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = context.getString(R.string.login_reg_text), style = MaterialTheme.typography.bodyMedium)
-                    TextButton(onClick = { onSignUpClicked() }) {
+                    TextButton(onClick = {  }) {
                         Text(text = context.getString(R.string.login_reg_button), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
@@ -233,17 +252,7 @@ fun SignInScreen(
             }
         }
     }
-    val user by viewModel.user.collectAsState()
-    if(user!=null){
-        when(user){
-            is AuthResult.Success -> navController.navigate("main_screen")
-            is AuthResult.Error -> {
-                Toast.makeText(context, (user as AuthResult.Error).message, Toast.LENGTH_LONG).show()
-                viewModel.nullifyUser()
-            }
-            null -> TODO()
-        }
-    }
+
 }
 @Preview
 @Composable

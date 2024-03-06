@@ -68,12 +68,26 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //okHttp interceptor
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.1")
+
+    //viewmodel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation ("androidx.compose.runtime:runtime-livedata:1.6.2")
+
+    //location service
     implementation ("com.google.android.gms:play-services-location:21.1.0")
+
+    //compose navigation
     implementation ("androidx.navigation:navigation-compose:2.7.7")
+
+    //credentials for google signin
     implementation("androidx.credentials:credentials:1.3.0-alpha01")
+
+    //data store for shared preferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }

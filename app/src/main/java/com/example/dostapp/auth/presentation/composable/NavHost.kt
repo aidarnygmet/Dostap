@@ -24,27 +24,13 @@ fun Navigation(navController: NavHostController){
     NavHost(navController = navController, startDestination = "auth"){
         navigation(startDestination = Screen.OnBoardingScreen.withArgs("1"), route = "auth"){
             composable(Screen.SignInScreen.route){
-                SignInScreen(onGoogleSignInClicked = { },
-                navController = navController
-                ,
-                onSignUpClicked = {
-                    navController.navigate(Screen.SignUpScreen.route)
-                },
+                SignInScreen(
+                navController = navController,
                 viewModel = viewModel)
             }
             composable(Screen.SignUpScreen.route){
                 SignUpScreen(
-                    onSignInClicked = {
-                        navController.navigate(Screen.SignInScreen.route)
-                    },
-                    signUp = { token->
-                        navController.navigate("main_screen"){
-                            popUpTo("auth"){
-                                inclusive = true
-                            }
-                        }
-                    },
-                    onGoogleSignInClicked = {},
+                    navController = navController,
                     viewModel = viewModel)
             }
             composable(Screen.OnBoardingScreen.route+"/1"){

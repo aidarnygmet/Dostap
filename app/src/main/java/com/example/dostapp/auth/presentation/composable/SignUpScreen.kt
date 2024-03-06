@@ -34,7 +34,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,9 +53,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.dostapp.R
 import com.example.dostapp.auth.data.model.AuthResult
+import com.example.dostapp.auth.data.model.AuthUiEvent
 import com.example.dostapp.auth.presentation.viewmodel.AuthViewModel
+import com.example.dostapp.core.data.Screen
 import com.example.dostapp.ui.theme.LightColorScheme
 import com.example.dostapp.ui.theme.defTypography
 
@@ -63,11 +67,29 @@ import com.example.dostapp.ui.theme.defTypography
 @Composable
 fun SignUpScreen(
     viewModel: AuthViewModel = viewModel(),
-    onSignInClicked: ()->Unit,
-    signUp: (String) -> Unit,
-    onGoogleSignInClicked: () -> Unit
+    navController: NavController
 ){
+    val state = viewModel.state
     val context = LocalContext.current
+    LaunchedEffect(viewModel, context){
+        viewModel.authResult.collect{result->
+            when(result){
+                is AuthResult.Authorized -> {
+                    navController.navigate(Screen.MainScreen.route){
+                        popUpTo(Screen.MainScreen.route){
+                            inclusive = true
+                        }
+                    }
+                }
+                is AuthResult.Unauthorized -> {
+                    Toast.makeText(context, "You are not authorized", Toast.LENGTH_LONG).show()
+                }
+                is AuthResult.UnknownError -> {
+                    Toast.makeText(context, "Unknown Error Occurred", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
     var email by remember {
         mutableStateOf("")
     }
@@ -86,7 +108,6 @@ fun SignUpScreen(
     var check2 by remember {
         mutableStateOf(false)
     }
-    val isLoading by viewModel.isLoading.collectAsState()
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color(0xFF1A8EEA))
@@ -118,8 +139,8 @@ fun SignUpScreen(
                         shape = RoundedCornerShape(44.dp),
                         textStyle = MaterialTheme.typography.labelLarge,
                         placeholder={ Text(modifier = Modifier.fillMaxSize(), text = context.getString(R.string.reg_name_placeholder), style = MaterialTheme.typography.labelLarge)},
-                        value = username,
-                        onValueChange = { username = it },
+                        value = viewModel.state.signUpUsername,
+                        onValueChange = { viewModel.onEvent(AuthUiEvent.SignUpUsernameChanged(it)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight(align = Alignment.CenterVertically)
@@ -138,10 +159,10 @@ fun SignUpScreen(
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
-                        value = email,
+                        value = viewModel.state.signUpEmail,
                         textStyle = MaterialTheme.typography.labelLarge,
                         isError = !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() && email !="",
-                        onValueChange = { email = it },
+                        onValueChange = { viewModel.onEvent(AuthUiEvent.SignUpEmailChanged(it)) },
                         placeholder={ Text(modifier = Modifier.fillMaxSize(), text = context.getString(R.string.reg_email_placeholder), style = MaterialTheme.typography.labelLarge)},
                         modifier = Modifier
                             .fillMaxWidth()
@@ -159,9 +180,9 @@ fun SignUpScreen(
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
                         shape = RoundedCornerShape(44.dp),
-                        value = password,
+                        value = viewModel.state.signUpPassword,
                         textStyle = MaterialTheme.typography.labelLarge,
-                        onValueChange = { password = it },
+                        onValueChange = { viewModel.onEvent(AuthUiEvent.SignUpPasswordChanged(it)) },
                         placeholder={ Text(text = "********", style = MaterialTheme.typography.labelLarge,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -184,7 +205,7 @@ fun SignUpScreen(
                         value = confirm,
                         textStyle = MaterialTheme.typography.labelLarge,
                         onValueChange = { confirm = it },
-                        isError = password!=confirm && confirm!="",
+                        isError = viewModel.state.signUpPassword!=confirm && confirm!="",
                         placeholder={ Text(text = "********", style = MaterialTheme.typography.labelLarge,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -222,14 +243,14 @@ fun SignUpScreen(
                     .fillMaxWidth()
                     .height(60.dp)
                     ,
-                    enabled= (check1 && check2 && !isLoading),
+                    enabled= (check1 && check2),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF1A1A1A),
                     )
                     , onClick = {
-                        viewModel.signUp(email, password, username)
+                        viewModel.onEvent(AuthUiEvent.SignUp)
                     }) {
-                    if(isLoading){
+                    if(state.isLoading){
                         CircularProgressIndicator()
                     } else {
                         Text(text = context.getString(R.string.reg_button))
@@ -266,7 +287,7 @@ fun SignUpScreen(
                             .height(50.dp)
                             .width(70.dp)
                             .border(0.5.dp, Color(0xFF959595), MaterialTheme.shapes.medium)
-                            .clickable { onGoogleSignInClicked() },
+                            .clickable { },
                             contentAlignment = Alignment.Center
                         ){
                             Image(painter = painterResource(id = R.drawable.google_logo), contentDescription = "google logo",
@@ -292,7 +313,7 @@ fun SignUpScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = context.getString(R.string.reg_have_account_label), style = MaterialTheme.typography.bodyMedium)
-                    TextButton(onClick = { onSignInClicked() }) {
+                    TextButton(onClick = {  }) {
                         Text(text = context.getString(R.string.reg_have_account_button), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
@@ -300,110 +321,17 @@ fun SignUpScreen(
 
             }
         }
-        val user by viewModel.user.collectAsState()
-        if(user != null){
-            when(user){
-                is AuthResult.Success -> {
-                    signUp((user as AuthResult.Success).userInfo.token)
-                }
-                is AuthResult.Error ->{
-                    Toast.makeText(context, (user as AuthResult.Error).message, Toast.LENGTH_LONG).show()
-                    viewModel.nullifyUser()
-                }
-                null -> {}
-            }
-        }
     }
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center
-//    ){
-//        Button(onClick = { onBackClicked() }) {
-//            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-//        }
-//        OutlinedTextField(
-//            value = email,
-//            onValueChange = { email = it },
-//            label = { Text("Email") },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(8.dp),
-//            keyboardOptions = KeyboardOptions.Default.copy(
-//                keyboardType = KeyboardType.Email
-//            ),
-//            leadingIcon = {
-//                Icon(Icons.Default.MailOutline, contentDescription = null)
-//            }
-//        )
-//        OutlinedTextField(
-//            value = username,
-//            onValueChange = { username = it },
-//            label = { Text("Username") },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(8.dp),
-//            keyboardOptions = KeyboardOptions.Default.copy(
-//                keyboardType = KeyboardType.Email
-//            ),
-//            leadingIcon = {
-//                Icon(Icons.Default.MailOutline, contentDescription = null)
-//            }
-//        )
-//        OutlinedTextField(
-//            value = password,
-//            onValueChange = { password = it },
-//            label = { Text("Password") },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(8.dp),
-//            keyboardOptions = KeyboardOptions.Default.copy(
-//                keyboardType = KeyboardType.Password
-//            ),
-//            visualTransformation = PasswordVisualTransformation(),
-//            leadingIcon = {
-//                Icon(Icons.Default.Lock, contentDescription = null)
-//            }
-//        )
-//
-//        OutlinedTextField(
-//            value = confirmPassword,
-//            onValueChange = { confirmPassword = it },
-//            label = { Text("Confirm Password") },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(8.dp),
-//            keyboardOptions = KeyboardOptions.Default.copy(
-//                keyboardType = KeyboardType.Password
-//            ),
-//            visualTransformation = PasswordVisualTransformation(),
-//            leadingIcon = {
-//                Icon(Icons.Default.Lock, contentDescription = null)
-//            }
-//        )
-//        Button(onClick = {
-//            if(password!=confirmPassword){
-//                Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
-//                return@Button
-//            }
-//            onButtonClicked(email, username, password)
-//        }) {
-//            Text(text = "Sign Up")
-//        }
-//    }
 }
 @Preview
 @Composable
 fun PreviewSignUp(){
+    val navController = rememberNavController()
     MaterialTheme(
         colorScheme = LightColorScheme,
         typography = defTypography
     ) {
-        SignUpScreen(onSignInClicked = { /*TODO*/ }, signUp = {a->}) {
-
-        }
+        SignUpScreen(navController = navController)
     }
 
 }
