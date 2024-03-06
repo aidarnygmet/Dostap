@@ -27,6 +27,9 @@
           <timeTargetWasSelectedWithDropDown value="2024-02-29T13:49:43.128321Z" />
         </State>
       </entry>
+      <entry key="SquaredCardPreview">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -41,22 +44,6 @@
             </Target>
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-03-01T12:06:01.302395Z" />
-        </State>
-      </entry>
-      <entry key="onBoardingPreview">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_6_Pro_API_33.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-29T19:57:16.226491Z" />
         </State>
       </entry>
     </value>
