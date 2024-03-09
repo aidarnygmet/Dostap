@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.dostapp"
+    namespace = "com.example.dostap"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.dostapp"
+        applicationId = "com.example.dostap"
         minSdk = 28
         targetSdk = 34
         versionCode = 1

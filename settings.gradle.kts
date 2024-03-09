@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Dostapp"
+rootProject.name = "Dostap"
 include(":app")
