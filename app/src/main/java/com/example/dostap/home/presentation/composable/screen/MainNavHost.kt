@@ -32,7 +32,7 @@ fun MainNavHost(
             Screen.NotificationsScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
-            NotificationScreen()
+            YandexMap()
         }
         composable(
             Screen.ChatsScreen.route,

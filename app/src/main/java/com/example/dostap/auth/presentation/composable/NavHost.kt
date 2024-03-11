@@ -1,6 +1,9 @@
 package com.example.dostap.auth.presentation.composable
 
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
@@ -12,6 +15,7 @@ import androidx.navigation.navigation
 import com.example.dostap.MyApp
 import com.example.dostap.R
 import com.example.dostap.auth.data.model.AuthResult
+import com.example.dostap.auth.data.model.AuthUiEvent
 import com.example.dostap.auth.presentation.viewmodel.AuthViewModel
 import com.example.dostap.auth.presentation.viewmodel.viewModelFactory
 import com.example.dostap.core.data.Screen
@@ -80,7 +84,7 @@ fun Navigation(navController: NavHostController){
                             is AuthResult.Authorized -> {
                                 navController.navigate(Screen.MainScreen.route){
                                     popUpTo(Screen.MainScreen.route){
-                                        inclusive = true
+                                        inclusive = false
                                     }
                                 }
                             }
@@ -97,17 +101,63 @@ fun Navigation(navController: NavHostController){
                                     }
                                 }
                             }
+                            is AuthResult.VerificationSent -> {
+
+                            }
                             is AuthResult.UnknownError -> {}
                         }
                     }
                 }
                 CircularProgressIndicator()
             }
+            composable(Screen.EmailVerification.route){
+                LaunchedEffect(viewModel){
+                    viewModel.authResult.collect{result->
+                        when(result){
+                            is AuthResult.Authorized -> {
+                                navController.navigate(Screen.MainScreen.route){
+                                    popUpTo(Screen.MainScreen.route){
+                                        inclusive = false
+                                    }
+                                }
+                            }
+                            is AuthResult.Unauthorized -> {
+                                navController.navigate(
+                                    if(isFirstTimeLaunch()){
+                                        Screen.OnBoardingScreen.withArgs("1")
+                                    } else {
+                                        Screen.SignUpScreen.route
+                                    }
+                                ){
+                                    popUpTo(Screen.LoadingScreen.route){
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                            is AuthResult.VerificationSent -> {
+
+                            }
+                            is AuthResult.UnknownError -> {}
+                        }
+                    }
+                }
+                Surface {
+                    Button(onClick = {
+                        viewModel.state = viewModel.state.copy(signInPassword = viewModel.state.signUpPassword,
+                            signInUsername = viewModel.state.signUpEmail)
+                        viewModel.onEvent(AuthUiEvent.SignIn)
+                    }) {
+                        Text(text = "I verified my email")
+                    }
+                }
+            }
         }
         navigation(startDestination = Screen.MainScreen.route, route = "main"){
             composable(Screen.MainScreen.route){
                 MainScreen(
-                    navigateToAuth = {navController.navigate(Screen.SignInScreen.route)}
+                    navigateToAuth = {navController.navigate(Screen.SignInScreen.route){
+                        popUpTo(Screen.SignInScreen.route)
+                    } }
                 )
             }
         }

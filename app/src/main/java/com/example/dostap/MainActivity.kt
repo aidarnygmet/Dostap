@@ -12,17 +12,17 @@ import com.example.dostap.auth.presentation.composable.Navigation
 import com.example.dostap.ui.theme.DostappTheme
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.yandex.mapkit.MapKitFactory
 
 class MainActivity : ComponentActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        MapKitFactory.initialize(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         setContent {
             DostappTheme {
-
                 val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -32,9 +32,12 @@ class MainActivity : ComponentActivity() {
                     Navigation(navController = navController)
 
                 }
+
+
             }
         }
     }
+
 
 }
 

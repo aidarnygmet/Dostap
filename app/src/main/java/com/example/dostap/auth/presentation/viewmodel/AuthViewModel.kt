@@ -62,7 +62,6 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
             )
             resultChannel.send(result)
             state = state.copy(isLoading = false)
-
         }
     }
     private fun signIn(){

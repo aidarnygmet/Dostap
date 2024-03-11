@@ -1,5 +1,6 @@
 package com.example.dostap.auth.data.model
 
 data class TokenResponse(
-    val token: String
+    val Token: String,
+    val Msg: String
 )

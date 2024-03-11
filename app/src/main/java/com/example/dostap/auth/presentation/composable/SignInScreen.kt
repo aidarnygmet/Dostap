@@ -78,7 +78,7 @@ fun SignInScreen(
                 is AuthResult.Authorized -> {
                     navController.navigate(Screen.MainScreen.route){
                         popUpTo(Screen.MainScreen.route){
-                            inclusive = true
+                            inclusive = false
                         }
                     }
                 }
@@ -88,6 +88,7 @@ fun SignInScreen(
                 is AuthResult.UnknownError -> {
                     Toast.makeText(context, "Unknown Error Occurred", Toast.LENGTH_LONG).show()
                 }
+                is AuthResult.VerificationSent -> {}
             }
         }
     }

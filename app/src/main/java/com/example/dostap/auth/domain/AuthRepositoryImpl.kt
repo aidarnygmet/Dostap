@@ -1,7 +1,10 @@
 package com.example.dostap.auth.domain
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.example.dostap.auth.data.model.AuthResult
+import com.example.dostap.auth.data.model.SignInRequest
+import com.example.dostap.auth.data.model.SignUpRequest
 import com.example.dostap.auth.data.repository.AuthApi
 import com.example.dostap.auth.data.repository.AuthRepository
 import kotlinx.coroutines.delay
@@ -14,10 +17,14 @@ class AuthRepositoryImpl(private val authApi: AuthApi, private val prefs: Shared
         username: String
     ): AuthResult<Unit> {
         return try {
-//            authApi.signUp(request = SignUpRequest(email = email,
-//                username = username,
-//                password = password))
-            signIn(email = email, password = password)
+            authApi.signUp(SignUpRequest(
+                first_name = username,
+                last_name = "placeholder",
+                password = password,
+                email = email,
+                description = "Android test user",
+            ))
+            AuthResult.VerificationSent()
         } catch (e: HttpException){
             if(e.code() == 401){
                 AuthResult.Unauthorized()
@@ -31,11 +38,11 @@ class AuthRepositoryImpl(private val authApi: AuthApi, private val prefs: Shared
 
     override suspend fun signIn(email: String, password: String): AuthResult<Unit> {
         return try {
-            //val response = authApi.signIn(request = AuthRequest(username = email, password = password))
+            val response = authApi.signIn(request = SignInRequest(email = email, password = password))
             prefs.edit()
-                .putString("jwt", "228")
+                .putString("jwt", response.Token)
                 .apply()
-            delay(2500)
+            Log.d("test", "resposne: "+response.Token)
             AuthResult.Authorized()
         } catch (e: HttpException){
             if(e.code() == 401){
@@ -44,6 +51,7 @@ class AuthRepositoryImpl(private val authApi: AuthApi, private val prefs: Shared
                 AuthResult.UnknownError()
             }
         } catch (e: Exception){
+            Log.d("test", "error: " +e.message)
             AuthResult.UnknownError()
         }
     }

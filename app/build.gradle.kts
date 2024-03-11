@@ -60,6 +60,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("com.google.android.gms:play-services-auth:21.0.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -90,4 +91,11 @@ dependencies {
 
     //data store for shared preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    //yandex map kit
+    implementation ("com.yandex.android:maps.mobile:4.5.1-lite")
+
+    //google maps
+    implementation ("com.google.maps.android:maps-compose:4.3.3")
+
 }

@@ -1,6 +1,6 @@
 package com.example.dostap.auth.data.repository
 
-import com.example.dostap.auth.data.model.AuthRequest
+import com.example.dostap.auth.data.model.SignInRequest
 import com.example.dostap.auth.data.model.SignUpRequest
 import com.example.dostap.auth.data.model.TokenResponse
 import okhttp3.ResponseBody
@@ -10,11 +10,11 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AuthApi {
-    @POST("signup")
+    @POST("/signup")
     suspend fun signUp(@Body request: SignUpRequest)
 
-    @POST("signin")
-    suspend fun signIn(@Body request: AuthRequest): TokenResponse
+    @POST("/login")
+    suspend fun signIn(@Body request: SignInRequest): TokenResponse
 
     @GET("/")
     suspend fun helloworld(): ResponseBody

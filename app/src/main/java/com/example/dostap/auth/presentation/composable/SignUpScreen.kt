@@ -84,6 +84,9 @@ fun SignUpScreen(
                 is AuthResult.Unauthorized -> {
                     Toast.makeText(context, "You are not authorized", Toast.LENGTH_LONG).show()
                 }
+                is AuthResult.VerificationSent -> {
+                    navController.navigate(Screen.EmailVerification.route)
+                }
                 is AuthResult.UnknownError -> {
                     Toast.makeText(context, "Unknown Error Occurred", Toast.LENGTH_LONG).show()
                 }
@@ -307,7 +310,9 @@ fun SignUpScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = context.getString(R.string.reg_have_account_label), style = MaterialTheme.typography.bodyMedium)
-                    TextButton(onClick = {  }) {
+                    TextButton(onClick = {
+                        navController.navigate(Screen.SignInScreen.route)
+                    }) {
                         Text(text = context.getString(R.string.reg_have_account_button), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
