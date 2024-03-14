@@ -50,6 +50,9 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
                 helloworld()
             }
 
+            is AuthUiEvent.SignUpLastNameChanged -> {
+                state = state.copy(signUpUserLastName = event.value)
+            }
         }
     }
     private fun signUp(){
@@ -58,7 +61,8 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
             val result = authRepository.signUp(
                 email = state.signUpEmail,
                 username = state.signUpUsername,
-                password = state.signUpPassword
+                password = state.signUpPassword,
+                lastname = state.signUpUserLastName
             )
             resultChannel.send(result)
             state = state.copy(isLoading = false)

@@ -17,17 +17,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,12 +44,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,7 +63,6 @@ import com.example.dostap.R
 import com.example.dostap.auth.data.model.AuthResult
 import com.example.dostap.auth.data.model.AuthUiEvent
 import com.example.dostap.auth.presentation.viewmodel.AuthViewModel
-import com.example.dostap.core.data.Screen
 import com.example.dostap.ui.theme.LightColorScheme
 import com.example.dostap.ui.theme.defTypography
 
@@ -62,53 +71,65 @@ import com.example.dostap.ui.theme.defTypography
 fun SignInScreen(
     viewModel: AuthViewModel = viewModel(),
     navController: NavController,
+    authorized: ()->Unit,
+    navigateToSignUp: ()->Unit
 )
 {
     val state = viewModel.state
     val context = LocalContext.current
-    var email by remember {
-        mutableStateOf("")
+    var isEmailValid by remember {
+        mutableStateOf(false)
     }
-    var password by remember {
-        mutableStateOf("")
+    var isPasswordValid by remember {
+        mutableStateOf(false)
+    }
+    var isPasswordVisible by remember {
+        mutableStateOf(false)
     }
     LaunchedEffect(viewModel, context){
         viewModel.authResult.collect{result->
             when(result){
                 is AuthResult.Authorized -> {
-                    navController.navigate(Screen.MainScreen.route){
-                        popUpTo(Screen.MainScreen.route){
-                            inclusive = false
-                        }
-                    }
+                    authorized()
                 }
                 is AuthResult.Unauthorized -> {
                     Toast.makeText(context, "You are not authorized", Toast.LENGTH_LONG).show()
                 }
                 is AuthResult.UnknownError -> {
-                    Toast.makeText(context, "Unknown Error Occurred", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Unknown Error occurred", Toast.LENGTH_LONG).show()
                 }
-                is AuthResult.VerificationSent -> {}
+                is AuthResult.UserDoesNotExist -> {
+                    Toast.makeText(context, "User does not exist", Toast.LENGTH_LONG).show()
+                }
+                is AuthResult.WrongPassword -> {
+                    Toast.makeText(context, "Wrong password", Toast.LENGTH_LONG).show()
+                }
+
+                else -> {}
             }
         }
     }
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(Color(0xFF1A8EEA))
+        .background(Color(0xFF292929))
     ){
 
-        Image(painter = painterResource(id = R.drawable.wagon),
-            contentDescription = "plane_ride")
+        Column(modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Image(painter = painterResource(id = R.drawable.auth),
+                contentDescription = "plane_ride")
+        }
         Column(modifier = Modifier
             .fillMaxSize()
         ) {
             Spacer(modifier = Modifier.fillMaxHeight(.23f))
             Column(modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(topStart = 48.dp, topEnd = 48.dp))
+                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                 .background(Color(0xFFF9F9F9))
                 .padding(horizontal = 30.dp)
                 .padding(top = 60.dp)
+                .verticalScroll(rememberScrollState())
             ) {
                 Text(text = context.getString(R.string.login_label), style = MaterialTheme.typography.displayLarge)
                 Text(text = context.getString(R.string.login_enter_login), style = MaterialTheme.typography.bodyMedium)
@@ -120,21 +141,35 @@ fun SignInScreen(
                     Text(text = context.getString(R.string.login_login_label), style = MaterialTheme.typography.titleLarge)
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
-                        shape = RoundedCornerShape(44.dp),
+                        shape = RoundedCornerShape(20.dp),
                         textStyle = MaterialTheme.typography.labelLarge,
                         value = state.signInUsername,
-                        onValueChange = { viewModel.onEvent(AuthUiEvent.SignInUsernameChanged(it)) },
+                        onValueChange = {
+                            viewModel.onEvent(AuthUiEvent.SignInUsernameChanged(it))
+                            isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(it).matches()},
                         placeholder={ Text(text = context.getString(R.string.login_login_placeholder), style = MaterialTheme.typography.labelLarge, modifier = Modifier
                             .fillMaxWidth())
                         },
-                        isError = !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() && email !="",
+                        isError = !android.util.Patterns.EMAIL_ADDRESS.matcher(viewModel.state.signInUsername).matches() && viewModel.state.signInUsername !="",
                         modifier = Modifier
                             .fillMaxWidth()
                         ,
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Email
-                        )
+                        ),
+                        trailingIcon = {
+                            if(isEmailValid){
+                                Icon(imageVector = Icons.Filled.Check, contentDescription = "trail")
+                            } else {
+                                Icon(imageVector = Icons.Filled.Clear, contentDescription = "trail")
+                            }
+                        }
                     )
+                    if(!isEmailValid && viewModel.state.signInUsername !=""){
+                        Spacer(modifier = Modifier.size(4.dp))
+                        Text(text = "*Пожалуйста, проверьте корректность вводимых данных", style = MaterialTheme.typography.bodySmall, color = Color.Red)
+                        Spacer(modifier = Modifier.size(4.dp))
+                    }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Column(
@@ -143,10 +178,13 @@ fun SignInScreen(
                     Text(text = context.getString(R.string.login_password_label), style = MaterialTheme.typography.titleLarge)
                     Spacer(modifier = Modifier.size(6.dp))
                     OutlinedTextField(
-                        shape = RoundedCornerShape(44.dp),
+                        shape = RoundedCornerShape(20.dp),
                         value = state.signInPassword,
                         textStyle = MaterialTheme.typography.labelLarge,
-                        onValueChange = { viewModel.onEvent(AuthUiEvent.SignInPasswordChanged(it)) },
+                        onValueChange = {
+                            viewModel.onEvent(AuthUiEvent.SignInPasswordChanged(it))
+                            isPasswordValid = isPasswordValid(it)
+                                        },
                         placeholder={ Text(text = "********", style = MaterialTheme.typography.labelLarge,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -155,8 +193,32 @@ fun SignInScreen(
                             .fillMaxWidth()
                         ,
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
-                        visualTransformation = PasswordVisualTransformation(),
+                        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                                    Icon(
+                                        imageVector = if (isPasswordVisible) ImageVector.vectorResource(
+                                            R.drawable.password_visible
+                                        ) else ImageVector.vectorResource(R.drawable.password_hidden),
+                                        contentDescription = if (isPasswordVisible) "Hide Password" else "Show Password"
+                                    )
+                                }
+                                if(isPasswordValid){
+                                    Icon(imageVector = Icons.Filled.Check, contentDescription = "trail")
+                                } else {
+                                    Icon(imageVector = Icons.Filled.Clear, contentDescription = "trail")
+                                }
+                                Spacer(modifier = Modifier.size(12.dp))
+                            }
+
+                        }
                     )
+                    if(!isPasswordValid && viewModel.state.signInPassword !=""){
+                        Spacer(modifier = Modifier.size(4.dp))
+                        Text(text = "*Недостаточно надежный пароль.Пароль должен быть не менее 8 символов и содержать минимум 1 цифру.", style = MaterialTheme.typography.bodySmall, color = Color.Red)
+                        Spacer(modifier = Modifier.size(4.dp))
+                    }
                 }
                 Row(
                     modifier = Modifier
@@ -171,9 +233,9 @@ fun SignInScreen(
                     .fillMaxWidth()
                     .height(60.dp)
                     ,
-                    enabled = !state.isLoading,
+                    enabled = !state.isLoading && isEmailValid && isPasswordValid,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF1A1A1A),
+                        containerColor = Color(0xFF7E2EFF),
                     )
                     , onClick = {
                         viewModel.onEvent(AuthUiEvent.SignIn)
@@ -184,6 +246,20 @@ fun SignInScreen(
                         CircularProgressIndicator()
                     }
 
+                }
+                Spacer(modifier = Modifier.size(10.dp))
+                Button(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .border(2.dp, Color(0xFF7E2EFF), MaterialTheme.shapes.extraLarge),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                    )
+                    , onClick = {
+                        navigateToSignUp()
+                    }) {
+                    Text(text = context.getString(R.string.reg_button), color = Color(0xFF7E2EFF),
+                        fontWeight = FontWeight.Bold)
                 }
                 Spacer(modifier = Modifier.size(10.dp))
                 Row(modifier = Modifier.fillMaxWidth(),
@@ -238,16 +314,6 @@ fun SignInScreen(
                 }
 
                 Spacer(modifier = Modifier.size(20.dp))
-                Row(modifier = Modifier.fillMaxWidth()
-                    ,
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = context.getString(R.string.login_reg_text), style = MaterialTheme.typography.bodyMedium)
-                    TextButton(onClick = { navController.navigate(Screen.SignUpScreen.route) }) {
-                        Text(text = context.getString(R.string.login_reg_button), style = MaterialTheme.typography.bodyMedium)
-                    }
-                }
 
 
             }

@@ -1,25 +1,25 @@
 package com.example.dostap.auth.domain
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.example.dostap.auth.data.model.AuthResult
 import com.example.dostap.auth.data.model.SignInRequest
 import com.example.dostap.auth.data.model.SignUpRequest
 import com.example.dostap.auth.data.repository.AuthApi
 import com.example.dostap.auth.data.repository.AuthRepository
-import kotlinx.coroutines.delay
+import org.json.JSONObject
 import retrofit2.HttpException
 
 class AuthRepositoryImpl(private val authApi: AuthApi, private val prefs: SharedPreferences) : AuthRepository {
     override suspend fun signUp(
         email: String,
         password: String,
-        username: String
+        username: String,
+        lastname: String
     ): AuthResult<Unit> {
         return try {
             authApi.signUp(SignUpRequest(
                 first_name = username,
-                last_name = "placeholder",
+                last_name = lastname,
                 password = password,
                 email = email,
                 description = "Android test user",
@@ -28,6 +28,14 @@ class AuthRepositoryImpl(private val authApi: AuthApi, private val prefs: Shared
         } catch (e: HttpException){
             if(e.code() == 401){
                 AuthResult.Unauthorized()
+            } else if(e.code() == 400){
+                val errorBody = e.response()?.errorBody()?.string()
+                val errorMessage = JSONObject(errorBody).getString("Message")
+                if (errorMessage.contains("user with this email already exists")){
+                    AuthResult.UserExists()
+                } else {
+                    AuthResult.UnknownError()
+                }
             } else {
                 AuthResult.UnknownError()
             }
@@ -42,16 +50,25 @@ class AuthRepositoryImpl(private val authApi: AuthApi, private val prefs: Shared
             prefs.edit()
                 .putString("jwt", response.Token)
                 .apply()
-            Log.d("test", "resposne: "+response.Token)
             AuthResult.Authorized()
         } catch (e: HttpException){
             if(e.code() == 401){
                 AuthResult.Unauthorized()
-            } else {
+            } else if(e.code() == 400){
+                val errorBody = e.response()?.errorBody()?.string()
+                val errorMessage = JSONObject(errorBody).getString("Message")
+                if (errorMessage.contains("no user exist with this email")){
+                    AuthResult.UserDoesNotExist()
+                } else if(errorMessage.contains("given password of ")) {
+                    AuthResult.WrongPassword()
+                } else {
+                    AuthResult.UnknownError()
+                }
+            }
+            else {
                 AuthResult.UnknownError()
             }
         } catch (e: Exception){
-            Log.d("test", "error: " +e.message)
             AuthResult.UnknownError()
         }
     }
@@ -69,7 +86,6 @@ class AuthRepositoryImpl(private val authApi: AuthApi, private val prefs: Shared
         return try {
             val token = prefs.getString("jwt", null)?: return AuthResult.Unauthorized()
             //authApi.authenticate("Bearer $token")
-            delay(2500)
             AuthResult.Authorized()
         } catch (e: HttpException){
             if(e.code() == 401){

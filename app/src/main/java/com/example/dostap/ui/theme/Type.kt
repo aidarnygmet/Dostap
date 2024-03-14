@@ -172,5 +172,29 @@ val defTypography = Typography(
         fontWeight = FontWeight.Light,
         fontSize = 14.sp
     )
-
+)
+val montserratFamily = FontFamily(
+    Font(R.font.montserrat_black, FontWeight.Black),
+    Font(R.font.montserrat_extrabold, FontWeight.ExtraBold),
+    Font(R.font.montserrat_bold, FontWeight.Bold),
+    Font(R.font.montserrat_semibold, FontWeight.SemiBold),
+    Font(R.font.montserrat_medium, FontWeight.Medium),
+    Font(R.font.montserrat_regular, FontWeight.Normal),
+    Font(R.font.montserrat_light, FontWeight.Light),
+    Font(R.font.montserrat_extralight, FontWeight.ExtraLight),
+    Font(R.font.montserrat_thin, FontWeight.Thin),
+)
+val newTypography = Typography(
+    displayMedium = TextStyle(
+        fontFamily = montserratFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 28.sp,
+        lineHeight = 34.13.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = montserratFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 25.6.sp
+    )
 )

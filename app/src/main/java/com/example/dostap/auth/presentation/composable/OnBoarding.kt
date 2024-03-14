@@ -1,5 +1,7 @@
 package com.example.dostap.auth.presentation.composable
 
+import android.widget.Toast
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -7,154 +9,125 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.dostap.R
+import com.example.dostap.auth.data.model.OnBoardingState
 import com.example.dostap.ui.theme.LightColorScheme
-import com.example.dostap.ui.theme.defTypography
+import com.example.dostap.ui.theme.newTypography
 
 @Composable
 fun OnBoarding(
-    params: OnBoardingData
+    toSignUp: ()->Unit
 ){
+    val context = LocalContext.current
+    val states = listOf(
+        OnBoardingState(1, context.getString(R.string.onBoarding1_label),context.getString(R.string.onBoarding1_body),
+            R.drawable.on_boarding_2
+        ),
+        OnBoardingState(2, context.getString(R.string.onBoarding2_label),context.getString(R.string.onBoarding2_body),
+            R.drawable.on_boarding_2),
+        OnBoardingState(3, context.getString(R.string.onBoarding3_label),context.getString(R.string.onBoarding3_body),
+            R.drawable.on_boarding_2)
+    )
+    var currentState by remember {
+        mutableIntStateOf(0)
+    }
+
+
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(Color(0xFF1A8EEA)),
-        contentAlignment = Alignment.TopCenter
+        .background(Color(0xFF292929))
     ){
-        Column {
-            Spacer(modifier = Modifier.height(60.dp))
-            Image(painter = painterResource(id = params.pic),
-                contentDescription = "devices", modifier = Modifier.size(300.dp))
-        }
-
-        Column(modifier = Modifier
-            .fillMaxSize()
-        ){
-            Spacer(modifier = Modifier.fillMaxHeight(.5f))
-            Column(modifier = Modifier
+        Column(
+            modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(topStart = 48.dp, topEnd = 48.dp))
-                .background(Color(0xFFF9F9F9))
                 .padding(horizontal = 30.dp)
-                .padding(top = 47.dp)
-                .padding(bottom = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
-            ){
-                Text(text = params.label, style = MaterialTheme.typography.displayLarge, textAlign = TextAlign.Center)
+        ) {
+            Spacer(modifier = Modifier.fillMaxSize(.2f))
+            Text(text = states[currentState].text1, style = MaterialTheme.typography.displayMedium, color = Color.White)
+            Spacer(modifier = Modifier.size(20.dp))
+            Text(text = states[currentState].text2, style = MaterialTheme.typography.bodyMedium, color = Color.White)
+            Spacer(modifier = Modifier.size(25.dp))
+            Row(modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                Stepper(selectedItem = currentState)
+                Spacer(modifier = Modifier.size(50.dp))
+                Button(modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        if(currentState==2){
+                            toSignUp()
+                        }
+                        if(currentState<2){
+                            currentState++
+                        }
 
-                Text(text = params.body, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 22.5.dp))
-
-                Button(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    ,
+                              },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF1A1A1A),
-                    )
-                    , onClick = { params.buttonClicked()}) {
-                    Text(text = params.button)
-                }
-
-                Row {
-                    if(params.dot == 1){
-                        Dot()
-                    } else {
-                        Dot(color = Color(0xFF959595))
-                    }
-                    Spacer(modifier = Modifier.size(16.dp))
-                    if(params.dot == 2){
-                        Dot()
-                    } else {
-                        Dot(color = Color(0xFF959595))
-                    }
-                    Spacer(modifier = Modifier.size(16.dp))
-                    if(params.dot == 3){
-                        Dot()
-                    } else {
-                        Dot(color = Color(0xFF959595))
-                    }
+                        containerColor = Color(0xFF7E2EFF)
+                    )) {
+                    Text(text = "Далее")
                 }
             }
-        }
+            Column(modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom) {
+                Image(painter = painterResource(id = states[currentState].image), contentDescription = "onboarding")
+            }
+            }
     }
 }
 @Composable
-fun Dot(
-    modifier: Modifier = Modifier,
-    color: Color = Color(0xFF1A8EEA),
-    size: Dp = 10.dp
-) {
-    Box(modifier = modifier
-        .size(size)
-        .clip(CircleShape)
-        .background(color)
+fun Stepper(selectedItem: Int){
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        repeat(3) { index ->
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 2.dp)
+                    .width(animateDpAsState(if (index == selectedItem) 30.dp else 15.dp).value)
+                    .height(5.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(if (index == selectedItem) Color(0xFF5B00ED) else Color(0xFF959595))
 
-    ){}
+
+            )
+        }
+    }
 }
-data class OnBoardingData(
-    val label: String,
-    val body: String,
-    val pic: Int,
-    val button: String,
-    val dot: Int,
-    val buttonClicked: ()->Unit
-)
+
 @Preview
 @Composable
 fun OnBoardingPreview(){
-    val context  = LocalContext.current
-    val params = OnBoardingData(
-        label = context.getString(R.string.onBoarding1_label),
-        body = context.getString(R.string.onBoarding1_body),
-        pic = R.drawable.devices,
-        button = "Далее",
-        dot = 1,
-        buttonClicked = {}
-        )
-    val params2 = OnBoardingData(
-        label = context.getString(R.string.onBoarding2_label),
-        body = context.getString(R.string.onBoarding2_body),
-        pic = R.drawable.party,
-        button = "Далее",
-        dot = 2,
-        buttonClicked = {}
-    )
-    val params3 = OnBoardingData(
-        label = context.getString(R.string.onBoarding3_label),
-        body = context.getString(R.string.onBoarding3_body),
-        pic = R.drawable.searching,
-        button = "Зарегистрироваться",
-        dot = 3,
-        buttonClicked = {}
-    )
+    val context = LocalContext.current
     MaterialTheme(
         colorScheme = LightColorScheme,
-        typography = defTypography
+        typography = newTypography
     ) {
-        OnBoarding(params3)
+        OnBoarding(){
+            Toast.makeText(context, "Sign Up", Toast.LENGTH_LONG).show()
+        }
     }
 
 }

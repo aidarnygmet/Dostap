@@ -6,15 +6,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.dostap.MyApp
-import com.example.dostap.R
 import com.example.dostap.auth.data.model.AuthResult
+import com.example.dostap.auth.data.model.AuthState
 import com.example.dostap.auth.data.model.AuthUiEvent
 import com.example.dostap.auth.presentation.viewmodel.AuthViewModel
 import com.example.dostap.auth.presentation.viewmodel.viewModelFactory
@@ -33,49 +32,39 @@ fun Navigation(navController: NavHostController){
         navigation(startDestination = Screen.LoadingScreen.route, route = "auth"){
             composable(Screen.SignInScreen.route){
                 SignInScreen(
-                navController = navController,
-                viewModel = viewModel)
+                    navController = navController,
+                    viewModel = viewModel,
+                    navigateToSignUp = {
+                        navController.navigate(Screen.SignUpScreen.route)
+                    },
+                    authorized = {
+                        navController.navigate(Screen.MainScreen.route){
+                            popUpTo("auth"){
+                                inclusive = true
+                            }
+                        }
+                        viewModel.state = AuthState()
+                    })
             }
             composable(Screen.SignUpScreen.route){
                 SignUpScreen(
                     navController = navController,
-                    viewModel = viewModel)
+                    viewModel = viewModel,
+                    navigateToSignIn = {
+                        navController.navigate(Screen.SignInScreen.route)
+                    },
+                    verificationSent = {
+                        navController.navigate(Screen.EmailVerification.route)
+                    })
             }
-            composable(Screen.OnBoardingScreen.route+"/1"){
-                val context = LocalContext.current
-                val params = OnBoardingData(
-                    label = context.getString(R.string.onBoarding1_label),
-                    body = context.getString(R.string.onBoarding1_body),
-                    pic = R.drawable.devices,
-                    button = "Далее",
-                    dot = 1,
-                    buttonClicked = {navController.navigate(Screen.OnBoardingScreen.withArgs("2"))}
-                )
-                OnBoarding(params)
-            }
-            composable(Screen.OnBoardingScreen.route+"/2"){
-                val context = LocalContext.current
-                val params = OnBoardingData(
-                    label = context.getString(R.string.onBoarding2_label),
-                    body = context.getString(R.string.onBoarding2_body),
-                    pic = R.drawable.party,
-                    button = "Далее",
-                    dot = 2,
-                    buttonClicked = {navController.navigate(Screen.OnBoardingScreen.withArgs("3"))}
-                )
-                OnBoarding(params)
-            }
-            composable(Screen.OnBoardingScreen.route+"/3"){
-                val context = LocalContext.current
-                val params = OnBoardingData(
-                    label = context.getString(R.string.onBoarding3_label),
-                    body = context.getString(R.string.onBoarding3_body),
-                    pic = R.drawable.searching,
-                    button = "Зарегистрироваться",
-                    dot = 3,
-                    buttonClicked = {navController.navigate(Screen.SignUpScreen.route)}
-                )
-                OnBoarding(params)
+            composable(Screen.OnBoardingScreen.route){
+                OnBoarding(){
+                    navController.navigate(Screen.SignUpScreen.route){
+                        popUpTo(Screen.OnBoardingScreen.route){
+                            inclusive = true
+                        }
+                    }
+                }
             }
             composable(Screen.LoadingScreen.route){
                 LaunchedEffect(viewModel){
@@ -83,15 +72,15 @@ fun Navigation(navController: NavHostController){
                         when(result){
                             is AuthResult.Authorized -> {
                                 navController.navigate(Screen.MainScreen.route){
-                                    popUpTo(Screen.MainScreen.route){
-                                        inclusive = false
+                                    popUpTo("auth"){
+                                        inclusive = true
                                     }
                                 }
                             }
                             is AuthResult.Unauthorized -> {
                                 navController.navigate(
                                     if(isFirstTimeLaunch()){
-                                        Screen.OnBoardingScreen.withArgs("1")
+                                        Screen.OnBoardingScreen.route
                                     } else {
                                         Screen.SignUpScreen.route
                                     }
@@ -101,10 +90,8 @@ fun Navigation(navController: NavHostController){
                                     }
                                 }
                             }
-                            is AuthResult.VerificationSent -> {
 
-                            }
-                            is AuthResult.UnknownError -> {}
+                            else -> {}
                         }
                     }
                 }
@@ -116,28 +103,22 @@ fun Navigation(navController: NavHostController){
                         when(result){
                             is AuthResult.Authorized -> {
                                 navController.navigate(Screen.MainScreen.route){
-                                    popUpTo(Screen.MainScreen.route){
-                                        inclusive = false
+                                    popUpTo("auth"){
+                                        inclusive = true
                                     }
                                 }
+                                viewModel.state = AuthState()
                             }
                             is AuthResult.Unauthorized -> {
                                 navController.navigate(
-                                    if(isFirstTimeLaunch()){
-                                        Screen.OnBoardingScreen.withArgs("1")
-                                    } else {
-                                        Screen.SignUpScreen.route
-                                    }
+                                    Screen.SignUpScreen.route
                                 ){
-                                    popUpTo(Screen.LoadingScreen.route){
+                                    popUpTo("auth"){
                                         inclusive = true
                                     }
                                 }
                             }
-                            is AuthResult.VerificationSent -> {
-
-                            }
-                            is AuthResult.UnknownError -> {}
+                            else -> {}
                         }
                     }
                 }
@@ -155,8 +136,11 @@ fun Navigation(navController: NavHostController){
         navigation(startDestination = Screen.MainScreen.route, route = "main"){
             composable(Screen.MainScreen.route){
                 MainScreen(
-                    navigateToAuth = {navController.navigate(Screen.SignInScreen.route){
-                        popUpTo(Screen.SignInScreen.route)
+                    navigateToAuth = {
+                        navController.navigate(Screen.SignInScreen.route){
+                            popUpTo(Screen.MainScreen.route){
+                                inclusive = true
+                            }
                     } }
                 )
             }

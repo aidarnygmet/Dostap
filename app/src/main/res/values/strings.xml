@@ -63,6 +63,8 @@
     <string name="arts_category">Искусство</string>
     <string name="friends">Друзья</string>
     <string name="sign_out">Выйти из аккаунта</string>
+    <string name="reg_last_name_label">Фамилия</string>
+    <string name="reg_last_name_placeholder">Ваша Фамилия</string>
 
 
 </resources>

@@ -6,5 +6,6 @@ data class AuthState(
     val signInPassword: String = "",
     val signUpUsername: String = "",
     val signUpPassword: String = "",
+    val signUpUserLastName: String = "",
     val signUpEmail: String = ""
 )
