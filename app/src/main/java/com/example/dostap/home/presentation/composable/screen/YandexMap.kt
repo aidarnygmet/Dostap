@@ -4,28 +4,31 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.dostap.MyApp
-import com.example.dostap.R
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 import com.yandex.mapkit.MapKitFactory
 
 @Suppress("DEPRECATION")
@@ -33,7 +36,6 @@ import com.yandex.mapkit.MapKitFactory
 fun YandexMap(){
     val context = LocalContext.current
     var location by remember { mutableStateOf(Pair(0.0, 0.0)) }
-    var recompose by remember { mutableIntStateOf(0) }
     Log.d("test", location.toString())
     val requestPermissionLauncher =
         rememberLauncherForActivityResult(
@@ -56,30 +58,44 @@ fun YandexMap(){
                     }
                 }
             })
-//    if (hasLocationPermission(context)){
-//        getLocation(context = context){
-//            location = it
-//        }
-//    } else {
-//        requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
-//    }
+    if (hasLocationPermission(context)){
+        getLocation(context = context){
+            location = it
+        }
+    } else {
+        requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+    val currentLoc = LatLng(location.first, location.second)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(currentLoc, 10f)
+    }
+
+
     Column(
-        modifier = Modifier. fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(bottom = 64.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MapKitFactory.initialize(context)
         Text(text = "Location: Latitude: ${location.first} and Longitude: ${location.second}")
-        Button(onClick = { recompose++ }) {
-            Text(text = "recompose")
-        }
-        AndroidView(factory = {
-            View.inflate(it, R.layout.yandex_map_layout, null)
-
-        },
+        GoogleMap(
             modifier = Modifier.fillMaxSize(),
-            update = {
+            cameraPositionState = cameraPositionState
+        ){
+            Marker(
+                state = MarkerState(position = currentLoc),
+                title = "Loc",
+                snippet = "Current Location"
+            )
 
-            })
+        }
+//        AndroidView(factory = {
+//            View.inflate(it, R.layout.yandex_map_layout, null)
+//
+//        },
+//            modifier = Modifier.fillMaxSize(),
+//            update = {
+//
+//            })
     }
 
 }

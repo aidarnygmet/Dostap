@@ -2,9 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="EEComponents">
-        <State />
-      </entry>
       <entry key="ExpandedEventPreview">
         <State />
       </entry>
@@ -38,12 +35,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_7_Pro_API_34.avd" />
+                  <value value="$USER_HOME$/.android/avd/Pixel_6_Pro_API_33.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-11T20:18:01.625009Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-03-11T22:05:58.985387Z" />
         </State>
       </entry>
     </value>

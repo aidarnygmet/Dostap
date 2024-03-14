@@ -244,7 +244,7 @@ fun SignInScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = context.getString(R.string.login_reg_text), style = MaterialTheme.typography.bodyMedium)
-                    TextButton(onClick = {  }) {
+                    TextButton(onClick = { navController.navigate(Screen.SignUpScreen.route) }) {
                         Text(text = context.getString(R.string.login_reg_button), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
