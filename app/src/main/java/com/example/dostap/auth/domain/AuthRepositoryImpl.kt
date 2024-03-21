@@ -1,6 +1,7 @@
 package com.example.dostap.auth.domain
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.example.dostap.auth.data.model.AuthResult
 import com.example.dostap.auth.data.model.SignInRequest
 import com.example.dostap.auth.data.model.SignUpRequest
@@ -70,6 +71,14 @@ class AuthRepositoryImpl(private val authApi: AuthApi, private val prefs: Shared
             }
         } catch (e: Exception){
             AuthResult.UnknownError()
+        }
+    }
+
+    override suspend fun deleteAccount(token: String) {
+        try {
+            val res = authApi.deleteAccount()
+        } catch (e: Exception){
+            Log.d("test", "delete error:"+e.message)
         }
     }
 

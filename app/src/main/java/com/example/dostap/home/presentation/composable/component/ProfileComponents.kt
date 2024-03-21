@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,14 +23,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.dostap.R
-import com.example.dostap.auth.data.model.Category
 import com.example.dostap.core.data.Screen
 import com.example.dostap.home.data.model.ProfileData
-import com.example.dostap.ui.theme.DostappTheme
 
 @Composable
 fun TopBar(navController:NavController){
@@ -132,32 +128,4 @@ fun Interests(){
 @Composable
 fun EventsProfile(){
 
-}
-@Preview
-@Composable
-fun ProfilePreview(){
-    val test = ProfileData(
-        username="username.xyz",
-        profilePic = R.drawable.ronaldo,
-        age = 22,
-        city = "Astana",
-        firstName = "Дос",
-        friendsCount = 15,
-        aboutUser = listOf(
-            "Ценитель старого кино",
-            "Путешественник, любитель кофе и кулинарный энтузиаст",
-            "NU, 2022",
-        ),
-        interests = listOf(
-            Category.Chess,
-            Category.Box,
-            Category.Skates
-        )
-    )
-    DostappTheme {
-        Surface {
-            BasicProfileInfo(profile =  test)
-        }
-
-    }
 }

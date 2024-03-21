@@ -8,12 +8,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.dostap.R
-import com.example.dostap.auth.data.model.Category
 import com.example.dostap.home.data.model.ProfileData
 import com.example.dostap.home.presentation.composable.component.BasicProfileInfo
 import com.example.dostap.home.presentation.composable.component.TopBar
@@ -37,27 +33,4 @@ fun ProfileScreen(profileData: ProfileData, navController: NavController){
     }
 }
 
-@Preview
-@Composable
-fun ProfilePreview(){
-    val navController = rememberNavController()
-    val test = ProfileData(
-        username="username.xyz",
-        profilePic = R.drawable.ronaldo,
-        age = 22,
-        city = "Astana",
-        firstName = "Дос",
-        friendsCount = 15,
-        aboutUser = listOf(
-            "Ценитель старого кино",
-            "Путешественник, любитель кофе и кулинарный энтузиаст",
-            "NU, 2022",
-        ),
-        interests = listOf(
-            Category.Chess,
-            Category.Box,
-            Category.Skates
-        )
-    )
-    ProfileScreen(profileData = test, navController = navController)
-}
+

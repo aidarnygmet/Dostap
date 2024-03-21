@@ -18,6 +18,8 @@ interface AuthApi {
 
     @GET("/")
     suspend fun helloworld(): ResponseBody
+    @GET("/deleteAccount")
+    suspend fun deleteAccount()
 
     @GET
     suspend fun authenticate(@Header("Authorization") token :String)

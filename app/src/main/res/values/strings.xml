@@ -42,7 +42,7 @@
     <string name="descr">Описание</string>
     <string name="place">Место Встречи</string>
     <string name="things">Что взять с собой</string>
-    <string name="football">Футбольный мяч</string>
+    <string name="football">Футбол</string>
     <string name="organizer">Организатор</string>
     <string name="going">Идут</string>
     <string name="rating">Рейтинг</string>
@@ -65,6 +65,27 @@
     <string name="sign_out">Выйти из аккаунта</string>
     <string name="reg_last_name_label">Фамилия</string>
     <string name="reg_last_name_placeholder">Ваша Фамилия</string>
+    <string name="bike">Велоспорт</string>
+    <string name="tennis">Теннис</string>
+    <string name="hiking">Хайкинг</string>
+    <string name="swimming">Плавание</string>
+    <string name="hockey">Хоккей</string>
+    <string name="weights">Весы</string>
+    <string name="volleyball">Воллейбол</string>
+    <string name="yoga">Йога</string>
+    <string name="running">Бег</string>
+    <string name="walk">Прогулка</string>
+    <string name="ball_bowling">Боулинг</string>
+    <string name="ice_skating">Коньки</string>
+    <string name="skiing">Лыжи</string>
+    <string name="dancing">Танцы</string>
+    <string name="concert">Концерты</string>
+    <string name="music">Музыка</string>
+    <string name="movie">Кино</string>
+    <string name="art">Искусство</string>
+    <string name="next">Далее</string>
+    <string name="whatareyoulookingfor">Что вы ищете?</string>
+    <string name="choose_variants">Выберите варианты, соответствующие тому, что вы ищете</string>
 
 
 </resources>
