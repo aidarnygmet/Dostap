@@ -1,6 +1,7 @@
 package com.example.dostap.auth.presentation.composable
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
@@ -13,11 +14,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +30,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -53,6 +58,9 @@ fun Welcome(){
     val context = LocalContext.current
     val chosenCategories by remember {
         mutableStateOf(mutableListOf<Int>())
+    }
+    val chosenVariants by remember {
+        mutableStateOf(mutableListOf<String>())
     }
     var showFirstColumn by remember { mutableStateOf(true) }
     var count by remember {
@@ -137,6 +145,7 @@ fun Welcome(){
                             containerColor = Color(0xFF7E2EFF)
                         ),
                         onClick = {
+                            Log.d("test", "chosen categories: $chosenCategories")
                             showFirstColumn = false
                         }) {
                         Text(text = context.getString(R.string.next))
@@ -166,6 +175,49 @@ fun Welcome(){
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = context.getString(R.string.choose_variants), style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.size(20.dp))
+                Variant(text = "Поиск новых друзей", onClick = {
+                    chosenVariants.add(it)
+                }, onSecondClick = {
+                    chosenVariants.remove(it)
+                })
+                Spacer(modifier = Modifier.size(10.dp))
+                Variant(text = "Поиск новых занятий", onClick = {
+                    chosenVariants.add(it)
+                }, onSecondClick = {
+                    chosenVariants.remove(it)
+                })
+                Spacer(modifier = Modifier.size(10.dp))
+                Variant(text = "Общение с другими людьми", onClick = {
+                    chosenVariants.add(it)
+                }, onSecondClick = {
+                    chosenVariants.remove(it)
+                })
+                Spacer(modifier = Modifier.size(10.dp))
+                Variant(text = "Формирование профессиональных связей", onClick = {
+                    chosenVariants.add(it)
+                }, onSecondClick = {
+                    chosenVariants.remove(it)
+                })
+                Spacer(modifier = Modifier.size(10.dp))
+                OtherVariant {toDelete, toAdd->
+                    if (chosenVariants.contains(toDelete)){
+                        chosenVariants.remove(toDelete)
+                    }
+                    chosenVariants.add(toAdd)
+                }
+                Spacer(modifier = Modifier.size(100.dp))
+                Button(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF7E2EFF)
+                    ),
+                    onClick = {
+                        Log.d("test", "chosen variants: $chosenVariants")
+                        showFirstColumn = true
+                    }) {
+                    Text(text = context.getString(R.string.next))
+                }
             }
             }
 
@@ -229,8 +281,67 @@ fun CategoryItem(category: Category, categoryChoosen:(Int)->Unit, modifier: Modi
             Text(text = context.getString(category.text), style = MaterialTheme.typography.labelLarge)
         }
     }
-
-
+}
+@Composable
+fun Variant(text: String, onClick: (String)->Unit, onSecondClick: (String)->Unit){
+    var checked by remember {
+        mutableStateOf(false)
+    }
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .height(IntrinsicSize.Min)
+        .clip(RoundedCornerShape(20.dp))
+        .border(1.dp, Color(0xFF959595), RoundedCornerShape(20.dp))
+        .clickable {
+            checked = !checked
+            if (checked) {
+                onClick(text)
+            } else {
+                onSecondClick(text)
+            }
+        }
+        .padding(16.dp)
+        ) {
+        Box(
+            modifier = Modifier
+                .size(24.dp)
+        ){
+            if (checked){
+                Image(painter = painterResource(id = R.drawable.check), contentDescription = "")
+            } else {
+                Image(painter = painterResource(id = R.drawable.circle), contentDescription = "")
+            }
+        }
+        Spacer(modifier = Modifier.size(10.dp))
+        Text(text = text)
+    }
+}
+@Composable
+fun OtherVariant(onClick: (String, String)->Unit){
+    var text by remember {
+        mutableStateOf("")
+    }
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .height(IntrinsicSize.Min)
+        .clip(RoundedCornerShape(20.dp))
+        .border(1.dp, Color(0xFF959595), RoundedCornerShape(20.dp))
+    ) {
+        TextField(
+            value = text,
+            onValueChange = {
+                onClick(text, it)
+                text = it
+                            },
+            placeholder = { Text(text = "Drugoe")},
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent
+            )
+        )
+    }
 }
 @Preview
 @Composable
@@ -243,6 +354,8 @@ fun WelcomePreview(){
     )
     DostappTheme {
         Welcome()
+
+
     }
 
 

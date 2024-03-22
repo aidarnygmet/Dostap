@@ -7,8 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.dostap.R
+import com.example.dostap.auth.data.model.Category
 import com.example.dostap.core.data.Screen
 import com.example.dostap.home.data.model.EventCard
+import com.example.dostap.home.data.model.ProfileData
 
 @Composable
 fun MainNavHost(
@@ -20,7 +22,8 @@ fun MainNavHost(
     NavHost(navController = navController, startDestination = startDestination, modifier = modifier){
         composable(
             Screen.HomeScreen.route,
-            enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
+            enterTransition = {
+                slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
             HomeScreen(onClick = {
                 navController.navigate(Screen.ExpandedEventScreen.route)
@@ -42,7 +45,17 @@ fun MainNavHost(
             Screen.ProfileScreen.route,
             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Right)}){
-
+            val profileData = ProfileData(
+                "qotaqbas",
+                R.drawable.ronaldo_big,
+                228,
+                "Qotaq",
+                11,
+                "Ashana",
+                listOf("dalbeob", "mal"),
+                listOf(Category.Art, Category.Movies)
+            )
+            ProfileScreen(profileData = profileData, navController = navController)
         }
         composable(Screen.ExpandedEventScreen.route){
             val eventCard = EventCard(

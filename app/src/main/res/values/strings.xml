@@ -86,6 +86,11 @@
     <string name="next">Далее</string>
     <string name="whatareyoulookingfor">Что вы ищете?</string>
     <string name="choose_variants">Выберите варианты, соответствующие тому, что вы ищете</string>
+    <string name="home_screen">Главная</string>
+    <string name="connections">Связи</string>
+    <string name="create">Создать</string>
+    <string name="chats">Чаты</string>
+    <string name="profile">Профиль</string>
 
 
 </resources>

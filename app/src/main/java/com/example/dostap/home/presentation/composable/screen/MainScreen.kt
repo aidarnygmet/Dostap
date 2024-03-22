@@ -2,14 +2,9 @@ package com.example.dostap.home.presentation.composable.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,17 +12,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.example.dostap.R
@@ -35,6 +35,7 @@ import com.example.dostap.core.data.Screen
 
 data class BottomNavigationItem(
     val title: String,
+    val text: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     val hasNews: Boolean = false,
@@ -46,17 +47,37 @@ data class BottomNavigationItem(
 fun MainScreen(
     navigateToAuth: ()->Unit
 ){
+    val context = LocalContext.current
     val navController = rememberNavController()
     val items = listOf(
-        BottomNavigationItem(title= Screen.HomeScreen.route,selectedIcon = Icons.Filled.Home, unselectedIcon = Icons.Outlined.Home),
-        BottomNavigationItem(title= Screen.NotificationsScreen.route,selectedIcon = ImageVector.vectorResource(R.drawable.notification_filled), unselectedIcon = ImageVector.vectorResource(R.drawable.notification_outlined), hasNews = true),
-        BottomNavigationItem(title="new",selectedIcon = Icons.Filled.Add, unselectedIcon = Icons.Outlined.Add),
-        BottomNavigationItem(title= Screen.ChatsScreen.route,selectedIcon = ImageVector.vectorResource(
-            R.drawable.forum_filled), unselectedIcon = ImageVector.vectorResource(R.drawable.forum_outlined), badgeCount = 7),
-        BottomNavigationItem(title= Screen.ProfileScreen.route,selectedIcon = Icons.Filled.Person, unselectedIcon = Icons.Outlined.Person),
+        BottomNavigationItem(
+            title= Screen.HomeScreen.route,
+            text=context.getString(R.string.home_screen),
+            selectedIcon = ImageVector.vectorResource(R.drawable.home_bottom_bar),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.home_bottom_bar)),
+        BottomNavigationItem(
+            title= Screen.NotificationsScreen.route,
+            text=context.getString(R.string.connections),
+            selectedIcon = ImageVector.vectorResource(R.drawable.chat_bottom_bar),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.chat_bottom_bar)),
+        BottomNavigationItem(
+            title="new",
+            text=context.getString(R.string.create),
+            selectedIcon = ImageVector.vectorResource(R.drawable.new_event_bottom_bar),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.new_event_bottom_bar)),
+        BottomNavigationItem(
+            title= Screen.ChatsScreen.route,
+            text=context.getString(R.string.chats),
+            selectedIcon = ImageVector.vectorResource(R.drawable.chat_bottom_bar),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.chat_bottom_bar)),
+        BottomNavigationItem(
+            title= Screen.ProfileScreen.route,
+            text=context.getString(R.string.profile),
+            selectedIcon = ImageVector.vectorResource(R.drawable.profile_bottom_bar),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.profile_bottom_bar)),
     )
     var selectedItemIndex by rememberSaveable {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
     Surface(
         modifier = Modifier
@@ -66,7 +87,9 @@ fun MainScreen(
     ) {
         Scaffold(
             bottomBar = {
-                NavigationBar {
+                NavigationBar(
+                    containerColor = Color.White
+                ) {
                     items.forEachIndexed{ index,item ->
                         NavigationBarItem(
                             selected = selectedItemIndex == index,
@@ -81,7 +104,6 @@ fun MainScreen(
                                         launchSingleTop = true
                                     }
                                 }
-
                                       },
                             icon = { 
                                 BadgedBox(badge = {
@@ -95,11 +117,26 @@ fun MainScreen(
                                         }
                                     }
                                 }) {
-                                    Icon(imageVector = if(selectedItemIndex == index){
-                                        item.selectedIcon
-                                    } else {item.unselectedIcon}, contentDescription = null)
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Icon(imageVector = if(selectedItemIndex == index){
+                                            item.selectedIcon
+                                        } else {item.unselectedIcon}, contentDescription = null)
+                                        Spacer(modifier = Modifier.size(4.dp))
+                                        Text(text = item.text, style = MaterialTheme.typography.labelLarge)
+                                    }
+
                                 }
-                            })
+                            },
+                            colors = NavigationBarItemColors(
+                                selectedIconColor = Color(0xFF1A8EEA),
+                                selectedTextColor = Color(0xFF1A8EEA),
+                                selectedIndicatorColor = Color.Transparent,
+                                unselectedIconColor = Color.Black,
+                                unselectedTextColor = Color.Black,
+                                disabledIconColor = Color.Gray,
+                                disabledTextColor = Color.Gray
+                            )
+                        )
                     }
                 }
             },
