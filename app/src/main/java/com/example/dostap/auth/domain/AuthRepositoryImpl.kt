@@ -1,7 +1,6 @@
 package com.example.dostap.auth.domain
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.example.dostap.auth.data.model.AuthResult
 import com.example.dostap.auth.data.model.SignInRequest
 import com.example.dostap.auth.data.model.SignUpRequest
@@ -74,13 +73,6 @@ class AuthRepositoryImpl(private val authApi: AuthApi, private val prefs: Shared
         }
     }
 
-    override suspend fun deleteAccount(token: String) {
-        try {
-            val res = authApi.deleteAccount()
-        } catch (e: Exception){
-            Log.d("test", "delete error:"+e.message)
-        }
-    }
 
     override suspend fun helloworld(): String {
         return try {
@@ -91,21 +83,6 @@ class AuthRepositoryImpl(private val authApi: AuthApi, private val prefs: Shared
         }
     }
 
-    override suspend fun authenticate(): AuthResult<Unit> {
-        return try {
-            val token = prefs.getString("jwt", null)?: return AuthResult.Unauthorized()
-            //authApi.authenticate("Bearer $token")
-            AuthResult.Authorized()
-        } catch (e: HttpException){
-            if(e.code() == 401){
-                AuthResult.Unauthorized()
-            } else {
-                AuthResult.UnknownError()
-            }
-        } catch (e: Exception){
-            AuthResult.UnknownError()
-        }
-    }
 
 
 }
