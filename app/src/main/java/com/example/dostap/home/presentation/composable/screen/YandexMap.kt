@@ -31,7 +31,6 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.yandex.mapkit.MapKitFactory
 
-@Suppress("DEPRECATION")
 @Composable
 fun YandexMap(){
     val context = LocalContext.current
@@ -42,7 +41,6 @@ fun YandexMap(){
             contract = ActivityResultContracts.RequestPermission(),
             onResult = { isGranted: Boolean ->
                 if (isGranted) {
-                    // Permission granted, update the location
                     if (ActivityCompat.checkSelfPermission(
                             context,
                             Manifest.permission.ACCESS_FINE_LOCATION
@@ -63,7 +61,7 @@ fun YandexMap(){
             location = it
         }
     } else {
-        requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
     val currentLoc = LatLng(location.first, location.second)
     val cameraPositionState = rememberCameraPositionState {
@@ -88,21 +86,13 @@ fun YandexMap(){
             )
 
         }
-//        AndroidView(factory = {
-//            View.inflate(it, R.layout.yandex_map_layout, null)
-//
-//        },
-//            modifier = Modifier.fillMaxSize(),
-//            update = {
-//
-//            })
     }
 
 }
 private fun hasLocationPermission(context: Context): Boolean {
     return ContextCompat.checkSelfPermission(
         context,
-        android.Manifest.permission.ACCESS_FINE_LOCATION
+        Manifest.permission.ACCESS_FINE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 }
 private fun getLocation(context: Context, onCallback: (Pair<Double, Double>)->Unit) {
@@ -119,16 +109,9 @@ private fun getLocation(context: Context, onCallback: (Pair<Double, Double>)->Un
                 onCallback(Pair(it.result.latitude, it.result.longitude))
             }
         }
-
     } else {
         Log.d("test", "Location is not provided")
         Toast.makeText(context, "Location is not provided", Toast.LENGTH_LONG).show()
     }
 
 }
-
-//@Preview
-//@Composable
-//fun YandexMapPreview(){
-//    YandexMap()
-//}

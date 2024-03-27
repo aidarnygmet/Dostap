@@ -12,9 +12,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.dostap.MyApp
-import com.example.dostap.auth.data.model.AuthResult
 import com.example.dostap.auth.data.model.AuthState
 import com.example.dostap.auth.data.model.AuthUiEvent
+import com.example.dostap.auth.data.model.LoginResult
 import com.example.dostap.auth.presentation.viewmodel.AuthViewModel
 import com.example.dostap.auth.presentation.viewmodel.viewModelFactory
 import com.example.dostap.core.data.Screen
@@ -68,16 +68,16 @@ fun Navigation(navController: NavHostController){
             }
             composable(Screen.LoadingScreen.route){
                 LaunchedEffect(viewModel){
-                    viewModel.authResult.collect{result->
+                    viewModel.loginResult.collect{result->
                         when(result){
-                            is AuthResult.Authorized -> {
+                            is LoginResult.Authorized -> {
                                 navController.navigate(Screen.MainScreen.route){
                                     popUpTo("auth"){
                                         inclusive = true
                                     }
                                 }
                             }
-                            is AuthResult.Unauthorized -> {
+                            is LoginResult.Unauthorized -> {
                                 navController.navigate(
                                     if(isFirstTimeLaunch()){
                                         Screen.OnBoardingScreen.route
@@ -99,9 +99,9 @@ fun Navigation(navController: NavHostController){
             }
             composable(Screen.EmailVerification.route){
                 LaunchedEffect(viewModel){
-                    viewModel.authResult.collect{result->
+                    viewModel.loginResult.collect{result->
                         when(result){
-                            is AuthResult.Authorized -> {
+                            is LoginResult.Authorized -> {
                                 navController.navigate(Screen.MainScreen.route){
                                     popUpTo("auth"){
                                         inclusive = true
@@ -109,7 +109,7 @@ fun Navigation(navController: NavHostController){
                                 }
                                 viewModel.state = AuthState()
                             }
-                            is AuthResult.Unauthorized -> {
+                            is LoginResult.Unauthorized -> {
                                 navController.navigate(
                                     Screen.SignUpScreen.route
                                 ){

@@ -6,9 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dostap.auth.data.model.AuthResult
 import com.example.dostap.auth.data.model.AuthState
 import com.example.dostap.auth.data.model.AuthUiEvent
+import com.example.dostap.auth.data.model.LoginResult
+import com.example.dostap.auth.data.model.SignUpResult
 import com.example.dostap.auth.data.repository.AuthRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -17,8 +18,10 @@ import kotlinx.coroutines.launch
 class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
 
     var state by mutableStateOf(AuthState())
-    private val resultChannel = Channel<AuthResult<Unit>>()
-    val authResult = resultChannel.receiveAsFlow()
+    private val loginResultChannel = Channel<LoginResult<Unit>>()
+    val loginResult = loginResultChannel.receiveAsFlow()
+    private val signUpResultChannel = Channel<SignUpResult<Unit>>()
+    val signUpResult = signUpResultChannel.receiveAsFlow()
     init {
         authenticate()
     }
@@ -64,7 +67,7 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
                 password = state.signUpPassword,
                 lastname = state.signUpUserLastName
             )
-            resultChannel.send(result)
+            signUpResultChannel.send(result)
             state = state.copy(isLoading = false)
         }
     }
@@ -75,7 +78,7 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
                 email = state.signInUsername,
                 password = state.signInPassword
             )
-            resultChannel.send(result)
+            loginResultChannel.send(result)
             state = state.copy(isLoading = false)
 
         }
@@ -91,7 +94,7 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
             state = state.copy(isLoading = true)
             val result = authRepository.authenticate(
             )
-            resultChannel.send(result)
+            loginResultChannel.send(result)
             state = state.copy(isLoading = false)
         }
     }

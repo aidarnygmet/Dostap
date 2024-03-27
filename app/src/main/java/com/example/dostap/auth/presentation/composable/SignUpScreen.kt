@@ -58,8 +58,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.dostap.MyApp
 import com.example.dostap.R
-import com.example.dostap.auth.data.model.AuthResult
 import com.example.dostap.auth.data.model.AuthUiEvent
+import com.example.dostap.auth.data.model.SignUpResult
 import com.example.dostap.auth.presentation.viewmodel.AuthViewModel
 import com.example.dostap.auth.presentation.viewmodel.viewModelFactory
 import com.example.dostap.ui.theme.LightColorScheme
@@ -76,22 +76,20 @@ fun SignUpScreen(
     val state = viewModel.state
     val context = LocalContext.current
     LaunchedEffect(viewModel, context){
-        viewModel.authResult.collect{result->
+        viewModel.signUpResult.collect{result->
             when(result){
-                is AuthResult.Unauthorized -> {
+                is SignUpResult.Unauthorized -> {
                     Toast.makeText(context, "You are not authorized", Toast.LENGTH_LONG).show()
                 }
-                is AuthResult.VerificationSent -> {
+                is SignUpResult.VerificationSent -> {
                     verificationSent()
                 }
-                is AuthResult.UnknownError -> {
+                is SignUpResult.UnknownError -> {
                     Toast.makeText(context, "Unknown Error occurred", Toast.LENGTH_LONG).show()
                 }
-                is AuthResult.UserExists -> {
+                is SignUpResult.UserExists -> {
                     Toast.makeText(context, "User already exists", Toast.LENGTH_LONG).show()
                 }
-
-                else -> {}
             }
         }
     }

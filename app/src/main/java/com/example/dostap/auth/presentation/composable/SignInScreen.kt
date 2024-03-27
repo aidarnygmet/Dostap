@@ -60,8 +60,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dostap.R
-import com.example.dostap.auth.data.model.AuthResult
 import com.example.dostap.auth.data.model.AuthUiEvent
+import com.example.dostap.auth.data.model.LoginResult
 import com.example.dostap.auth.presentation.viewmodel.AuthViewModel
 import com.example.dostap.ui.theme.LightColorScheme
 import com.example.dostap.ui.theme.defTypography
@@ -87,25 +87,23 @@ fun SignInScreen(
         mutableStateOf(false)
     }
     LaunchedEffect(viewModel, context){
-        viewModel.authResult.collect{result->
+        viewModel.loginResult.collect{result->
             when(result){
-                is AuthResult.Authorized -> {
+                is LoginResult.Authorized -> {
                     authorized()
                 }
-                is AuthResult.Unauthorized -> {
+                is LoginResult.Unauthorized -> {
                     Toast.makeText(context, "You are not authorized", Toast.LENGTH_LONG).show()
                 }
-                is AuthResult.UnknownError -> {
+                is LoginResult.UnknownError -> {
                     Toast.makeText(context, "Unknown Error occurred", Toast.LENGTH_LONG).show()
                 }
-                is AuthResult.UserDoesNotExist -> {
+                is LoginResult.UserDoesNotExist -> {
                     Toast.makeText(context, "User does not exist", Toast.LENGTH_LONG).show()
                 }
-                is AuthResult.WrongPassword -> {
+                is LoginResult.WrongPassword -> {
                     Toast.makeText(context, "Wrong password", Toast.LENGTH_LONG).show()
                 }
-
-                else -> {}
             }
         }
     }
